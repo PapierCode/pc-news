@@ -21,7 +21,7 @@ add_action('plugins_loaded', function() { // en attente du plugin [PC] Tools
     /*----------  Include  ----------*/
     
     // création du post
-    include 'include/custom-post.php';
+    include 'include/post.php';
     // intégration à l'administration du thème préformaté
     include 'include/preform-admin.php';
     // intégration aux templates du thème préformaté
