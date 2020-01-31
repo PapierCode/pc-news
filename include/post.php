@@ -90,9 +90,8 @@ if ( class_exists( 'PC_Add_Custom_Post' ) && class_exists( 'PC_Add_Admin_Page' )
 	$news_post_declaration->add_custom_tax( NEWS_TAX_SLUG, $news_tax_labels, $news_tax_args );
 
 
-	/*----------  Filtre  ----------*/
+	/*----------  Variable de requête  ----------*/
 
-	// déclaration variable
 	add_filter( 'query_vars', 'pc_news_query_vars' );
 
 		function pc_news_query_vars( $vars ){
