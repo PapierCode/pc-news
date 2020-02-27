@@ -41,7 +41,7 @@ add_filter( 'pc_filter_page_content_from', 'pc_add_news_to_page', 10, 1 );
     function pc_add_news_to_page( $page_content_from ) {
 
         $page_content_from['news'] = array(
-            'Liste des actualités',
+            'Liste d\'actualités',
             dirname( __FILE__ ).'\template-list.php'
         );
 
@@ -70,36 +70,3 @@ add_filter( 'pc_filter_metabox_seo_for', 'pc_news_metabox_for', 10, 1 );
 
 
 /*=====  FIN Réutilisation des Métaboxes  =====*/
-
-/*======================================================
-=            Options pour la page d'accueil            =
-======================================================*/
-
-add_filter( 'pc_filter_settings_home_fields', 'pc_news_add_to_settings_home',10 , 1 );
-
-    function pc_news_add_to_settings_home( $fields ) {
-
-        $fields[0]['fields'][] = array(
-            'type'      => 'text',
-            'label_for' => 'newstitle',
-            'label'     => 'Titre des actualités',
-            'css'       => 'width:100%',
-            'required'  => true
-        );
-        $fields[0]['fields'][] = array(
-            'type'      => 'select',
-            'label_for' => 'nbnews',
-            'label'     => 'Nombre d\'actualités',
-            'required'  => true,
-            'options'   => array(
-                '2' => '2',
-                '4' => '4'
-            )
-        );
-
-        return $fields;
-
-    }
-
-
-/*=====  FIN Options pour la page d'accueil  =====*/

@@ -13,16 +13,17 @@
  * 
  */
 
-/*===========================================================
-=            Redirection vers la template single            =
-===========================================================*/
+/*=========================================================
+=            Redirection vers la template page            =
+=========================================================*/
 
 add_filter( 'single_template', 'pc_news_add_to_page', 999, 1 );
 
 function pc_news_add_to_page( $single_template ) {
 
     if ( is_singular( NEWS_POST_SLUG ) ) {
-        $single_template = dirname( __FILE__ ).'\template-single.php';
+        //$single_template = dirname( __FILE__ ).'\template-single.php';
+        $single_template = get_template_directory().'\page.php';
     }
 
     return $single_template;
@@ -30,7 +31,7 @@ function pc_news_add_to_page( $single_template ) {
 }
 
 
-/*=====  FIN Redirection vers la template single  =====*/
+/*=====  FIN Redirection vers la template page  =====*/
 
 /*===================================================
 =            Afficher le filtre en cours            =
@@ -50,69 +51,131 @@ add_action( 'pc_content_before', 'pc_news_display_current_filter', 30 );
 
 /*=====  FIN Afficher le filtre en cours  =====*/
 
-/*=========================================================
-=            Date et catégories dans le résumé            =
-=========================================================*/
+/*======================================
+=            Date le résumé            =
+======================================*/
 
-add_action( 'pc_display_post_resum_more', 'pc_news_add_to_post_resum', 10, 1 );
+add_action( 'pc_action_post_resum_after_start', 'pc_news_add_to_post_resum', 10, 1 );
 
     function pc_news_add_to_post_resum( $post_id ) {
 
-        /*----------  date  ----------*/
+		if ( get_post_type( $post_id ) == 'news' ) {
 
-        echo '<time class="st-date" datetime="'.get_the_date('c',$post_id).'">Publié le '.get_the_date('',$post_id).'</time>';
+			echo '<div class="st-details"><time class="st-date" datetime="'.get_the_date('c',$post_id).'">Actualité du '.get_the_date('',$post_id).'</time></div>';
 
-        /*----------  Taxonomy  ----------*/
-    
-        if ( taxonomy_exists( NEWS_TAX_SLUG ) ) {
-    
-            // toutes les taxonomies 'newscategories' attachées au post (tableau d'objets)
-            $terms = wp_get_post_terms( $post_id, NEWS_TAX_SLUG, array( "fields" => "all" ) );
-    
-            // si il y a au moins une tax
-            if ( count( $terms ) > 0 ) {
-    
-                echo '<ul class="st-tax-list">';
-                foreach ( $terms as $term_datas ) {
-                    echo '<li class="reset-list st-tax-list-item"><a class="st-tax-list-link" href="'.pc_get_page_by_custom_content(NEWS_POST_SLUG).'?'.NEWS_TAX_QUERY_VAR.'='.$term_datas->slug.'" title="Tous les actualités publiées dans '.$term_datas->name.'" rel="nofollow">'.$term_datas->name.'</a></li>';
-                }
-                echo '</ul>';
-    
-            }
-    
-        }
+		}
 
-    }
+	}
+	
 
+/*=====  FIN Date le résumé  =====*/
 
-/*=====  FIN Date et catégories dans le résumé  =====*/
+/*==============================
+=            Single            =
+==============================*/
 
-/*====================================================
-=            Navigation précédent/suivant            =
-====================================================*/
+/*----------  Date  ----------*/
 
-// template ajoutée par le plugin mais qui reprend la structure des pages du thème Préformaté
+add_action( 'pc_content_before', 'pc_display_news_main_date', 35, 1 );
 
-add_action( 'pc_content_footer', 'pc_display_main_footer_news_nav_links', 30, 1 );
+	function pc_display_news_main_date( $post ) {
 
-function pc_display_main_footer_news_nav_links( $post ) {
+		if ( $post->post_type == NEWS_POST_SLUG ) {
 
-    if ( $post->post_type == NEWS_POST_SLUG ) {
+			echo '<time class="news-date" datetime="'.get_the_date('c',$post->ID).'">Actualité du '.get_the_date('',$post->ID).'</time>';
 
-        $datas_nav = array(
-            '<span>Article </span>Précédent',
-            '<span>Article </span>Suivant',
-            pc_get_page_by_custom_content(NEWS_POST_SLUG)
-        );
+		}
 
-        pc_post_navigation( $datas_nav['0'], $datas_nav['1'], $datas_nav['2'] );
-
-    }
-
-}
+	}
 
 
-/*=====  FIN Navigation précédent/suivant  =====*/
+/*----------  Page précédente / retour liste  ----------*/
+
+add_action( 'pc_content_footer', 'pc_display_news_main_footer_nav_links', 30, 1 );
+
+	function pc_display_news_main_footer_nav_links( $post ) {
+
+		if ( $post->post_type == NEWS_POST_SLUG ) {
+
+			$wp_referer = wp_get_referer();
+			
+			if ( $wp_referer ) {
+				$back_link = $wp_referer;
+			} else {
+				$back_link = pc_get_page_by_custom_content(NEWS_POST_SLUG);
+			}
+
+			echo '<nav class="main-footer-nav"><a href="'.$back_link.'" class="btn" title="Page précédente">'.pc_svg('arrow',null,'svg_block').'<span>Retour</span></a></nav>';
+
+		}
+
+	}
+
+
+/*----------  Données structurées  ----------*/
+	
+add_action( 'pc_content_after', 'pc_display_news_structured_datas', 20, 2 );
+
+	function pc_display_news_structured_datas( $post, $metas ) {
+
+		if ( $post->post_type == NEWS_POST_SLUG ) {
+		
+			global $settings_project, $images_project_sizes;
+			$post_id = $post->ID;
+			$post_url = get_the_permalink($post_id);
+			$theme_dir = get_bloginfo('template_directory');
+
+			if ( isset( $metas['thumbnail-img'] ) ) {
+				$post_img = pc_get_img( $metas['thumbnail-img'][0], 'share', 'datas' );
+			} else {
+				$post_img = array( $theme_dir.'/images/logo.jpg', 300, 300); 
+			}
+			
+			?> <script type="application/ld+json">
+				{
+					"@context": "http://schema.org",
+					"@type": "NewsArticle",
+					"url": "<?= $post_url; ?>",
+					"author": {
+						"@type": "Organization",
+						"name": "<?= $settings_project['coord-name']; ?>",
+						"logo": {
+							"@type":"ImageObject",
+							"url" : "<?= $theme_dir; ?>/images/logo.jpg",
+							"width" : "<?= $images_project_sizes['share']['width']; ?>",
+							"height" : "<?= $images_project_sizes['share']['height']; ?>"
+						}
+					},
+					"publisher": {
+						"@type": "Organization",
+						"name": "<?= $settings_project['coord-name']; ?>",
+						"logo": {
+							"@type":"ImageObject",
+							"url" : "<?= $theme_dir; ?>/images/logo.jpg",
+							"width" : "<?= $images_project_sizes['share']['width']; ?>",
+							"height" : "<?= $images_project_sizes['share']['height']; ?>"
+						}
+					},
+					"headline": "<?= get_the_title($post_id); ?>",
+					"image": {
+						"@type":"ImageObject",
+						"url" : "<?= $post_img[0]; ?>",
+						"width" : "<?= $post_img[1]; ?>",
+						"height" : "<?= $post_img[2]; ?>"
+					},
+					"datePublished": "<?= get_the_date('c', $post_id); ?>",
+					"dateModified": "<?php the_modified_date('c', $post_id); ?>",
+					"description": "<?= (isset($metas['resum-desc'])) ? $metas['resum-desc'][0] : get_the_excerpt($post_id); ?>",
+					"mainEntityOfPage": "<?= $post_url; ?>"
+				}
+			</script>
+	
+		<?php }
+
+	}
+
+
+/*=====  FIN Single  =====*/
 
 /*===========================================================
 =            Dernières actualités dans l'accueil            =
@@ -124,17 +187,12 @@ function pc_display_home_content_news( $settings_home ) {
 
     $home_news = get_posts(array(
         'post_type' => NEWS_POST_SLUG,
-        'posts_per_page' => $settings_home['content-nbnews']
+        'posts_per_page' => 4
 
     ));
 
     if ( count($home_news) > 0 ) {
-        echo '<aside class="">';
-            echo '<h2 class="h1-like">'.$settings_home['content-newstitle'].'</h2>';
-            echo '<div class="st-list" data-nb="'.$settings_home['content-nbnews'].'">';
-                foreach ($home_news as $post) { pc_display_post_resum( $post->ID, '', 3, true ); }
-            echo '</div>';
-        echo '</aside>';
+        foreach ($home_news as $post) { pc_display_post_resum( $post->ID, 'st--news', 3, true ); }
     }
 
 }

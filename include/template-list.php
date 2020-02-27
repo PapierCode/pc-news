@@ -36,19 +36,29 @@ $news_query = new WP_Query( $news_query_args );
 =            Affichage            =
 =================================*/
 
-if ( $news_query->have_posts() ) { ?>
+if ( $news_query->have_posts() ) {
 
-    <div class="st-list">
+	// affichage des actus
+    while ( $news_query->have_posts() ) { $news_query->the_post();
 
-    <?php while ( $news_query->have_posts() ) { $news_query->the_post();
+        pc_display_post_resum( $news_query->post->ID, 'st--news', 2 );
 
-        pc_display_post_resum( $news_query->post->ID, '', 2 );
+	}
 
-    } ?>
+	// ajout de faux éléments pour compléter la grille
+	pc_add_fake_st( count($news_query->posts), 'st--news' );
+	
+	// pagination
+	add_action( 'pc_content_footer', 'pc_display_main_footer_news_pager', 25 );
 
-    </div>
+		function pc_display_main_footer_news_pager() {
 
-    <?php pc_get_pager( $news_query, $current_page_number );
+			global  $news_query, $current_page_number;
+			echo '<nav class="main-footer-nav">';
+			pc_get_pager( $news_query, $current_page_number );
+			echo '</nav>';
+			
+		}
     
 }
  
