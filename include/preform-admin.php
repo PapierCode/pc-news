@@ -20,14 +20,14 @@
 add_action( 'manage_'.NEWS_POST_SLUG.'_posts_columns', 'pc_admin_list_column_img', 10, 2);
 add_action( 'manage_'.NEWS_POST_SLUG.'_posts_custom_column', 'pc_admin_list_column_img_content', 10, 2);
 
-add_filter( 'manage_edit-'.NEWS_TAX_SLUG.'_columns', 'pc_news_tax_columns', 10, 1 );
+// add_filter( 'manage_edit-'.NEWS_TAX_SLUG.'_columns', 'pc_news_tax_columns', 10, 1 );
 
-    function pc_news_tax_columns( $columns ) {
+//     function pc_news_tax_columns( $columns ) {
         
-        unset( $columns['description'] );
-        return $columns;
+//         unset( $columns['description'] );
+//         return $columns;
 
-    }
+//     }
 
 
 /*=====  FIN Colonnes de la liste des articles  =====*/
@@ -42,7 +42,7 @@ add_filter( 'pc_filter_page_content_from', 'pc_add_news_to_page', 10, 1 );
 
         $page_content_from['news'] = array(
             'Liste d\'actualités',
-            dirname( __FILE__ ).'\template-list.php'
+            dirname( __FILE__ ).'/template-list.php'
         );
 
         return $page_content_from;
