@@ -4,14 +4,29 @@
  * 
  * Intégration à l'administration du thème Préformaté
  * 
+ ** Actiosn groupées
  ** Colonnes de la liste des articles
  ** Ajout de l'option dans les pages
  ** Réutilisation des Métaboxes
- ** Options pour la page d'accueil
  * 
  */
 
- 
+/*========================================
+=            Actions groupées            =
+========================================*/
+
+
+add_filter( 'bulk_actions-edit-'.NEWS_POST_SLUG, 'pc_news_bluk_actions' );
+
+	function pc_news_bluk_actions( $actions ) {
+
+		unset($actions['edit']);
+		return $actions;
+
+	}
+
+
+/*=====  FIN Actions groupées  =====*/
 /*=========================================================
 =            Colonnes de la liste des articles            =
 =========================================================*/

@@ -4,10 +4,10 @@
  * 
  * Intégration aux templates du thème Préformaté
  * 
- ** Redirection vers la template single
+ ** Redirection vers la template page
  ** Afficher le filtre en cours
- ** Date et catégories dans le résumé
- ** Navigation précédent/suivant
+ ** Date dans le résumé
+ ** Single
  ** Dernières actualités dans l'accueil
  ** Item menu actif
  * 
@@ -23,7 +23,7 @@ function pc_news_add_to_page( $single_template ) {
 
     if ( is_singular( NEWS_POST_SLUG ) ) {
         //$single_template = dirname( __FILE__ ).'\template-single.php';
-        $single_template = get_template_directory().'\page.php';
+        $single_template = get_template_directory().'/page.php';
     }
 
     return $single_template;
@@ -37,16 +37,16 @@ function pc_news_add_to_page( $single_template ) {
 =            Afficher le filtre en cours            =
 ===================================================*/
 
-add_action( 'pc_content_before', 'pc_news_display_current_filter', 30 );
+// add_action( 'pc_content_before', 'pc_news_display_current_filter', 30 );
 
-    function pc_news_display_current_filter() {
+//     function pc_news_display_current_filter() {
 
-        if ( get_query_var( NEWS_TAX_QUERY_VAR ) ) {
-            $current_news_cat = get_term_by( 'slug', get_query_var( NEWS_TAX_QUERY_VAR ), NEWS_TAX_SLUG );
-            echo '<p>Pour la catégorie <em>'.$current_news_cat->name.'</em></p>';
-        }
+//         if ( get_query_var( NEWS_TAX_QUERY_VAR ) ) {
+//             $current_news_cat = get_term_by( 'slug', get_query_var( NEWS_TAX_QUERY_VAR ), NEWS_TAX_SLUG );
+//             echo '<p>Pour la catégorie <em>'.$current_news_cat->name.'</em></p>';
+//         }
 
-    }
+//     }
 
 
 /*=====  FIN Afficher le filtre en cours  =====*/
@@ -76,7 +76,7 @@ add_action( 'pc_action_post_resum_after_start', 'pc_news_add_to_post_resum', 10,
 
 /*----------  Date  ----------*/
 
-add_action( 'pc_content_before', 'pc_display_news_main_date', 35, 1 );
+add_action( 'pc_page_content_before', 'pc_display_news_main_date', 35, 1 );
 
 	function pc_display_news_main_date( $post ) {
 
@@ -91,7 +91,7 @@ add_action( 'pc_content_before', 'pc_display_news_main_date', 35, 1 );
 
 /*----------  Page précédente / retour liste  ----------*/
 
-add_action( 'pc_content_footer', 'pc_display_news_main_footer_nav_links', 30, 1 );
+add_action( 'pc_page_content_footer', 'pc_display_news_main_footer_nav_links', 30, 1 );
 
 	function pc_display_news_main_footer_nav_links( $post ) {
 
@@ -114,7 +114,7 @@ add_action( 'pc_content_footer', 'pc_display_news_main_footer_nav_links', 30, 1 
 
 /*----------  Données structurées  ----------*/
 	
-add_action( 'pc_content_after', 'pc_display_news_structured_datas', 20, 2 );
+add_action( 'pc_page_content_after', 'pc_display_news_structured_datas', 20, 2 );
 
 	function pc_display_news_structured_datas( $post, $metas ) {
 
@@ -130,50 +130,120 @@ add_action( 'pc_content_after', 'pc_display_news_structured_datas', 20, 2 );
 			} else {
 				$post_img = array( $theme_dir.'/images/logo.jpg', 300, 300); 
 			}
+
+			$json = array(
+				'@context'	=> 'http=>//schema.org',
+				'@type' 	=> 'NewsArticle',
+				'url'		=> $post_url,
+				'author'	=> array(
+					'@type'	=> 'Organization',
+					'name'	=> $settings_project['coord-name'],
+					'logo'	=> array(
+						'@type'		=>'ImageObject',
+						'url' 		=> $theme_dir.'/images/logo.jpg',
+						'width' 	=> $images_project_sizes['share']['width'],
+						'height'	=> $images_project_sizes['share']['height']
+					)
+				),
+				'publisher'	=> array(
+					'@type'	=> 'Organization',
+					'name'	=> $settings_project['coord-name'],
+					'logo'	=> array(
+						'@type'		=>'ImageObject',
+						'url' 		=> $theme_dir.'/images/logo.jpg',
+						'width' 	=> $images_project_sizes['share']['width'],
+						'height'	=> $images_project_sizes['share']['height']
+					)
+				),
+				'headline'	=> get_the_title($post_id),
+				'image'		=> array(
+					'@type'		=>'ImageObject',
+					'url' 		=> $post_img[0],
+					'width' 	=> $post_img[1],
+					'height' 	=> $post_img[2]
+				),
+				'datePublished'		=> get_the_date('c', $post_id),
+				'dateModified'		=> get_the_modified_date('c', $post_id),
+				'description'		=> (isset($metas['resum-desc'])) ? $metas['resum-desc'][0] : get_the_excerpt($post_id),
+				'mainEntityOfPage'	=> $post_url
+			);
+
+			$json = apply_filters( 'pc_filter_news_json', $json, $post, $metas, $settings_project, $images_project_sizes );
 			
-			?> <script type="application/ld+json">
-				{
-					"@context": "http://schema.org",
-					"@type": "NewsArticle",
-					"url": "<?= $post_url; ?>",
-					"author": {
-						"@type": "Organization",
-						"name": "<?= $settings_project['coord-name']; ?>",
-						"logo": {
-							"@type":"ImageObject",
-							"url" : "<?= $theme_dir; ?>/images/logo.jpg",
-							"width" : "<?= $images_project_sizes['share']['width']; ?>",
-							"height" : "<?= $images_project_sizes['share']['height']; ?>"
-						}
-					},
-					"publisher": {
-						"@type": "Organization",
-						"name": "<?= $settings_project['coord-name']; ?>",
-						"logo": {
-							"@type":"ImageObject",
-							"url" : "<?= $theme_dir; ?>/images/logo.jpg",
-							"width" : "<?= $images_project_sizes['share']['width']; ?>",
-							"height" : "<?= $images_project_sizes['share']['height']; ?>"
-						}
-					},
-					"headline": "<?= get_the_title($post_id); ?>",
-					"image": {
-						"@type":"ImageObject",
-						"url" : "<?= $post_img[0]; ?>",
-						"width" : "<?= $post_img[1]; ?>",
-						"height" : "<?= $post_img[2]; ?>"
-					},
-					"datePublished": "<?= get_the_date('c', $post_id); ?>",
-					"dateModified": "<?php the_modified_date('c', $post_id); ?>",
-					"description": "<?= (isset($metas['resum-desc'])) ? $metas['resum-desc'][0] : get_the_excerpt($post_id); ?>",
-					"mainEntityOfPage": "<?= $post_url; ?>"
-				}
-			</script>
+			echo '<script type="application/ld+json">'.json_encode($json,JSON_UNESCAPED_SLASHES).'</script>';
 	
-		<?php }
+		}
 
 	}
 
+
+/*----------  Métas titre & description, image de partage, custom CSS  ----------*/
+
+add_filter( 'pc_filter_meta_title', 'pc_news_meta_title', 1 );
+
+	function pc_news_meta_title( $meta_title ) {
+
+		$post_id = get_the_id();
+		if ( get_post_type( $post_id ) == NEWS_POST_SLUG ) {
+			$page_metas = get_post_meta( $post_id );
+			$meta_title = ( isset( $page_metas['seo-title'] ) ) ? $page_metas['seo-title'][0] : get_the_title($post_id);
+		}
+		return $meta_title;
+
+	}
+
+add_filter( 'pc_filter_meta_description', 'pc_news_meta_description', 1 );
+
+	function pc_news_meta_description( $meta_description ) {
+
+		$post_id = get_the_id();
+		if ( get_post_type( $post_id ) == NEWS_POST_SLUG ) {
+			$page_metas = get_post_meta( $post_id );
+			if ( isset( $page_metas['seo-desc'] ) ) {
+				$meta_description = $page_metas['seo-desc'][0];
+			}
+			else if ( isset( $page_metas['resum-desc'] ) ) {
+				$meta_description = $page_metas['resum-desc'][0];
+			} else {
+				$meta_description = get_the_excerpt($post_id);
+			}
+		}
+		return $meta_description;
+
+	}
+
+add_filter( 'pc_filter_img_to_share', 'pc_news_img_to_share', 1 );
+
+	function pc_news_img_to_share( $img_to_share ) {
+
+		$post_id = get_the_id();
+		if ( get_post_type( $post_id ) == NEWS_POST_SLUG ) {
+			$page_metas = get_post_meta( $post_id );
+			if ( isset( $page_metas['thumbnail-img'] ) ) {
+				$img_to_share = wp_get_attachment_image_src($page_metas['thumbnail-img'][0],'share')[0];
+			}
+		}
+		return $img_to_share;
+
+	}
+
+add_filter( 'pc_filter_css_custom', 'pc_news_css_custom', 1 );
+
+	function pc_news_css_custom( $css_custom ) {
+
+		$post_id = get_the_id();
+		if ( get_post_type( $post_id ) == NEWS_POST_SLUG ) {
+			global $settings_project;
+			$page_metas = get_post_meta( $post_id );
+			if ( isset( $page_metas['thumbnail-img'] ) ) {
+				if ( $settings_project['theme'] == 'fullscreen' ) { $css_custom .= pc_fs_main_header_css_bg($page_metas['thumbnail-img'][0]); }
+			}
+		}
+		return $css_custom;
+
+	}
+	
+	
 
 /*=====  FIN Single  =====*/
 
@@ -193,7 +263,8 @@ function pc_display_home_content_news( $settings_home ) {
 
     if ( count($home_news) > 0 ) {
         foreach ($home_news as $post) { pc_display_post_resum( $post->ID, 'st--news', 3, true ); }
-    }
+	}
+	pc_add_fake_st( count($home_news) );
 
 }
 

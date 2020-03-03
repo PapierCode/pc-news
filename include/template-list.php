@@ -45,11 +45,10 @@ if ( $news_query->have_posts() ) {
 
 	}
 
-	// ajout de faux éléments pour compléter la grille
 	pc_add_fake_st( count($news_query->posts), 'st--news' );
 	
 	// pagination
-	add_action( 'pc_content_footer', 'pc_display_main_footer_news_pager', 25 );
+	add_action( 'pc_page_content_footer', 'pc_display_main_footer_news_pager', 25 );
 
 		function pc_display_main_footer_news_pager() {
 
