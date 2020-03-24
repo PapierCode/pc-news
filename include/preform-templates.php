@@ -61,7 +61,7 @@ add_action( 'pc_action_post_resum_after_start', 'pc_news_add_to_post_resum', 10,
 
 		if ( get_post_type( $post_id ) == 'news' ) {
 
-			echo '<div class="st-details"><time class="st-date" datetime="'.get_the_date('c',$post_id).'">Actualité du '.get_the_date('',$post_id).'</time></div>';
+			echo '<time class="st-date" datetime="'.get_the_date('c',$post_id).'">Actualité du <span>'.get_the_date('',$post_id).'</span></time>';
 
 		}
 
@@ -132,7 +132,7 @@ add_action( 'pc_page_content_after', 'pc_display_news_structured_datas', 20, 2 )
 			}
 
 			$json = array(
-				'@context'	=> 'http=>//schema.org',
+				'@context'	=> 'http://schema.org',
 				'@type' 	=> 'NewsArticle',
 				'url'		=> $post_url,
 				'author'	=> array(
