@@ -11,6 +11,29 @@
  * 
  */
 
+
+/*=======================================================
+=            Paramètres de la page d'accueil            =
+=======================================================*/
+
+add_filter( 'pc_filter_settings_home_fields', 'pc_news_home_settings' );
+
+	function pc_news_home_settings( $settings_home_fields ) {
+
+		$settings_home_fields[0]['fields'][] = array(
+			'type'      => 'text',
+			'label_for' => 'news-title',
+			'label'     => 'Titre des actualités',
+			'css'       => 'width:100%'
+		);
+
+		return $settings_home_fields;
+
+	}
+
+
+/*=====  FIN Paramètres de la page d'accueil  =====*/
+
 /*========================================
 =            Actions groupées            =
 ========================================*/
@@ -27,22 +50,14 @@ add_filter( 'bulk_actions-edit-'.NEWS_POST_SLUG, 'pc_news_bluk_actions' );
 
 
 /*=====  FIN Actions groupées  =====*/
+
 /*=========================================================
 =            Colonnes de la liste des articles            =
 =========================================================*/
 
-// reprise de fonction utilisées dans le thème pour afficher une vignette
+// reprise de fonctions utilisées dans le thème pour afficher une vignette
 add_action( 'manage_'.NEWS_POST_SLUG.'_posts_columns', 'pc_admin_list_column_img', 10, 2);
 add_action( 'manage_'.NEWS_POST_SLUG.'_posts_custom_column', 'pc_admin_list_column_img_content', 10, 2);
-
-// add_filter( 'manage_edit-'.NEWS_TAX_SLUG.'_columns', 'pc_news_tax_columns', 10, 1 );
-
-//     function pc_news_tax_columns( $columns ) {
-        
-//         unset( $columns['description'] );
-//         return $columns;
-
-//     }
 
 
 /*=====  FIN Colonnes de la liste des articles  =====*/

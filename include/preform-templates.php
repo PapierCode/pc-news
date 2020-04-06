@@ -225,7 +225,6 @@ add_filter( 'pc_filter_css_custom', 'pc_news_css_custom', 1 );
 
 	}
 	
-	
 
 /*=====  FIN Single  =====*/
 
@@ -241,9 +240,12 @@ function pc_display_home_content_news( $settings_home ) {
         'post_type' => NEWS_POST_SLUG,
         'posts_per_page' => 4
 
-    ));
+	));
+	
+	$title = ( $settings_home['content-news-title'] != '' ) ? $settings_home['content-news-title'] : 'Actualités';
 
     if ( count($home_news) > 0 ) {
+		echo '<h2 class="home-news-title">'.$title.'</h2>';
         foreach ($home_news as $post) { pc_display_post_resum( $post->ID, 'st--news', 3, true ); }
 	}
 	pc_add_fake_st( count($home_news) );
