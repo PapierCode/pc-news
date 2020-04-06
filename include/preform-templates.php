@@ -33,24 +33,6 @@ function pc_news_add_to_page( $single_template ) {
 
 /*=====  FIN Redirection vers la template page  =====*/
 
-/*===================================================
-=            Afficher le filtre en cours            =
-===================================================*/
-
-// add_action( 'pc_content_before', 'pc_news_display_current_filter', 30 );
-
-//     function pc_news_display_current_filter() {
-
-//         if ( get_query_var( NEWS_TAX_QUERY_VAR ) ) {
-//             $current_news_cat = get_term_by( 'slug', get_query_var( NEWS_TAX_QUERY_VAR ), NEWS_TAX_SLUG );
-//             echo '<p>Pour la catégorie <em>'.$current_news_cat->name.'</em></p>';
-//         }
-
-//     }
-
-
-/*=====  FIN Afficher le filtre en cours  =====*/
-
 /*======================================
 =            Date le résumé            =
 ======================================*/

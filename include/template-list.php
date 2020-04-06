@@ -5,8 +5,11 @@
  * 
  */  
 
+ 
+global $news_query, $news_page_number;
+
 // page en cours (pager)
-$current_page_number = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+$news_page_number = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
 /*=============================
 =            Query            =
@@ -15,7 +18,7 @@ $current_page_number = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) :
 $news_query_args = array(
     'post_type' => NEWS_POST_SLUG,
     'posts_per_page' => get_option( 'posts_per_page' ),
-    'paged' => $current_page_number
+    'paged' => $news_page_number
 );
 
 if ( get_query_var( NEWS_TAX_QUERY_VAR ) ) {
@@ -51,10 +54,10 @@ if ( $news_query->have_posts() ) {
 	add_action( 'pc_page_content_footer', 'pc_display_main_footer_news_pager', 25 );
 
 		function pc_display_main_footer_news_pager() {
-
-			global  $news_query, $current_page_number;
+			
+			global $news_query, $news_page_number;
 			echo '<nav class="main-footer-nav">';
-			pc_get_pager( $news_query, $current_page_number );
+			pc_get_pager( $news_query, $news_page_number );
 			echo '</nav>';
 			
 		}

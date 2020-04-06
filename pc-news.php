@@ -15,7 +15,8 @@ add_action('plugins_loaded', function() { // en attente du plugin [PC] Tools
     
     define( 'NEWS_POST_SLUG', 'news' );
     define( 'NEWS_TAX_SLUG', 'newstax' );
-    define( 'NEWS_TAX_QUERY_VAR', 'actucat' );
+	define( 'NEWS_TAX_QUERY_VAR', 'actucat' );
+	
 
 
     /*----------  Include  ----------*/
