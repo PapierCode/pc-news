@@ -189,7 +189,7 @@ function pc_display_home_content_news( $settings_home ) {
 
 	));
 	
-	$title = ( $settings_home['content-news-title'] != '' ) ? $settings_home['content-news-title'] : 'Actualités';
+	$title = ( isset($settings_home['content-news-title']) && $settings_home['content-news-title'] != '' ) ? $settings_home['content-news-title'] : 'Actualités';
 
     if ( count($home_news) > 0 ) {
 		echo '<h2 class="home-news-title fs-bloc">'.$title.'</h2>';
