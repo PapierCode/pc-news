@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 
  * Intégration aux templates du thème Préformaté
@@ -13,6 +12,7 @@
  * 
  */
 
+ 
 /*=========================================================
 =            Redirection vers la template page            =
 =========================================================*/
@@ -96,65 +96,15 @@ add_action( 'pc_page_content_footer', 'pc_display_news_main_footer_nav_links', 3
 
 /*----------  Données structurées  ----------*/
 	
-add_action( 'pc_page_content_after', 'pc_display_news_structured_datas', 20, 2 );
+add_filter( 'pc_filter_schema_post', 'pc_news_schema', 10, 3 );
 
-	function pc_display_news_structured_datas( $post, $metas ) {
+	function pc_news_schema( $schema_post, $post, $post_metas ) {
 
 		if ( $post->post_type == NEWS_POST_SLUG ) {
-		
-			global $settings_project, $images_project_sizes;
-			$post_id = $post->ID;
-			$post_url = get_the_permalink($post_id);
-			$theme_dir = get_bloginfo('template_directory');
-
-			if ( isset( $metas['thumbnail-img'] ) ) {
-				$post_img = pc_get_img( $metas['thumbnail-img'][0], 'share', 'datas' );
-			} else {
-				$post_img = array( $theme_dir.'/images/logo.jpg', 300, 300); 
-			}
-
-			$json = array(
-				'@context'	=> 'http://schema.org',
-				'@type' 	=> 'NewsArticle',
-				'url'		=> $post_url,
-				'author'	=> array(
-					'@type'	=> 'Organization',
-					'name'	=> $settings_project['coord-name'],
-					'logo'	=> array(
-						'@type'		=>'ImageObject',
-						'url' 		=> $theme_dir.'/images/logo.jpg',
-						'width' 	=> $images_project_sizes['share']['width'],
-						'height'	=> $images_project_sizes['share']['height']
-					)
-				),
-				'publisher'	=> array(
-					'@type'	=> 'Organization',
-					'name'	=> $settings_project['coord-name'],
-					'logo'	=> array(
-						'@type'		=>'ImageObject',
-						'url' 		=> $theme_dir.'/images/logo.jpg',
-						'width' 	=> $images_project_sizes['share']['width'],
-						'height'	=> $images_project_sizes['share']['height']
-					)
-				),
-				'headline'	=> get_the_title($post_id),
-				'image'		=> array(
-					'@type'		=>'ImageObject',
-					'url' 		=> $post_img[0],
-					'width' 	=> $post_img[1],
-					'height' 	=> $post_img[2]
-				),
-				'datePublished'		=> get_the_date('c', $post_id),
-				'dateModified'		=> get_the_modified_date('c', $post_id),
-				'description'		=> (isset($metas['resum-desc'])) ? $metas['resum-desc'][0] : get_the_excerpt($post_id),
-				'mainEntityOfPage'	=> $post_url
-			);
-
-			$json = apply_filters( 'pc_filter_news_json', $json, $post, $metas, $settings_project, $images_project_sizes );
-			
-			echo '<script type="application/ld+json">'.json_encode($json,JSON_UNESCAPED_SLASHES).'</script>';
-	
+			$schema_post['@type'] = 'NewsArticle';
 		}
+
+		return $schema_post;
 
 	}
 
@@ -167,9 +117,10 @@ add_filter( 'pc_filter_meta_title', 'pc_news_meta_title', 1 );
 
 		$post_id = get_the_id();
 		if ( get_post_type( $post_id ) == NEWS_POST_SLUG ) {
-			$page_metas = get_post_meta( $post_id );
-			$meta_title = ( isset( $page_metas['seo-title'] ) ) ? $page_metas['seo-title'][0] : get_the_title($post_id);
+			$post_metas = get_post_meta( $post_id );
+			$meta_title = ( isset( $post_metas['seo-title'] ) ) ? $post_metas['seo-title'][0] : get_the_title($post_id);
 		}
+
 		return $meta_title;
 
 	}
@@ -180,16 +131,10 @@ add_filter( 'pc_filter_meta_description', 'pc_news_meta_description', 1 );
 
 		$post_id = get_the_id();
 		if ( get_post_type( $post_id ) == NEWS_POST_SLUG ) {
-			$page_metas = get_post_meta( $post_id );
-			if ( isset( $page_metas['seo-desc'] ) ) {
-				$meta_description = $page_metas['seo-desc'][0];
-			}
-			else if ( isset( $page_metas['resum-desc'] ) ) {
-				$meta_description = $page_metas['resum-desc'][0];
-			} else {
-				$meta_description = get_the_excerpt($post_id);
-			}
+			$post_metas = get_post_meta( $post_id );
+			$meta_description = pc_get_page_excerpt( $post_id, $post_metas );
 		}
+
 		return $meta_description;
 
 	}
@@ -200,11 +145,12 @@ add_filter( 'pc_filter_img_to_share', 'pc_news_img_to_share', 1 );
 
 		$post_id = get_the_id();
 		if ( get_post_type( $post_id ) == NEWS_POST_SLUG ) {
-			$page_metas = get_post_meta( $post_id );
-			if ( isset( $page_metas['thumbnail-img'] ) ) {
-				$img_to_share = wp_get_attachment_image_src($page_metas['thumbnail-img'][0],'share')[0];
+			$post_metas = get_post_meta( $post_id );
+			if ( isset( $post_metas['thumbnail-img'] ) ) {
+				$img_to_share = wp_get_attachment_image_src($post_metas['thumbnail-img'][0],'share')[0];
 			}
 		}
+
 		return $img_to_share;
 
 	}
@@ -216,11 +162,12 @@ add_filter( 'pc_filter_css_custom', 'pc_news_css_custom', 1 );
 		$post_id = get_the_id();
 		if ( get_post_type( $post_id ) == NEWS_POST_SLUG ) {
 			global $settings_project;
-			$page_metas = get_post_meta( $post_id );
-			if ( isset( $page_metas['thumbnail-img'] ) ) {
-				if ( $settings_project['theme'] == 'fullscreen' ) { $css_custom .= pc_fs_main_header_css_bg($page_metas['thumbnail-img'][0]); }
+			$post_metas = get_post_meta( $post_id );
+			if ( isset( $post_metas['thumbnail-img'] ) ) {
+				if ( $settings_project['theme'] == 'fullscreen' ) { $css_custom .= pc_fs_main_header_css_bg($post_metas['thumbnail-img'][0]); }
 			}
 		}
+
 		return $css_custom;
 
 	}
@@ -245,7 +192,7 @@ function pc_display_home_content_news( $settings_home ) {
 	$title = ( $settings_home['content-news-title'] != '' ) ? $settings_home['content-news-title'] : 'Actualités';
 
     if ( count($home_news) > 0 ) {
-		echo '<h2 class="home-news-title">'.$title.'</h2>';
+		echo '<h2 class="home-news-title fs-bloc">'.$title.'</h2>';
         foreach ($home_news as $post) { pc_display_post_resum( $post->ID, 'st--news', 3, true ); }
 	}
 	pc_add_fake_st( count($home_news) );
