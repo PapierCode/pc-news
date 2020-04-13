@@ -103,6 +103,10 @@ add_filter( 'pc_filter_schema_post', 'pc_news_schema', 10, 3 );
 		if ( $post->post_type == NEWS_POST_SLUG ) {
 			$schema_post['@type'] = 'NewsArticle';
 		}
+		if ( isset($post_metas['content-from']) && $post_metas['content-from'][0] == 'news' ) {
+			// suppression schema article dans la liste d'actualités
+			$schema_post = array();
+		}
 
 		return $schema_post;
 
@@ -179,25 +183,76 @@ add_filter( 'pc_filter_css_custom', 'pc_news_css_custom', 1 );
 =            Dernières actualités dans l'accueil            =
 ===========================================================*/
 
+/*----------  Données structurées  ----------*/
+
+add_filter( 'pc_filter_schema_home', 'pc_home_news_schema' );
+
+	function pc_home_news_schema( $home_schema ) {
+
+		// liste
+		$home_news = get_posts(array(
+			'post_type' => NEWS_POST_SLUG,
+			'posts_per_page' => 4
+		));
+
+		if ( count($home_news) > 0 ) {
+			foreach ($home_news as $key => $post) {
+				
+				$post_id = $post->ID;
+				$post_metas = get_post_meta($post_id);
+
+				if ( isset( $post_metas['thumbnail-img'] ) ) {
+					$img = pc_get_img( $post_metas['thumbnail-img'][0], 'share', 'datas' );
+				} else {
+					$img = pc_get_img_default_to_share();
+				}
+
+				// ajout données structurées
+				// cf. fn-template_home.php
+				$home_schema['mainEntity']['itemListElement'][] = array(
+					'@type' => 'ListItem',
+					'name' => $post->post_title,
+					'description' => pc_get_page_excerpt( $post_id, $post_metas ),
+					'url' => get_the_permalink($post_id),
+					'image' => array(
+						'@type'		=>'ImageObject',
+						'url' 		=> $img[0],
+						'width' 	=> $img[1],
+						'height' 	=> $img[2]
+					)
+				);
+
+			}
+		}
+
+		return $home_schema;
+
+	}
+
+
+/*----------  Affichage  ----------*/
+
 add_action( 'pc_home_content', 'pc_display_home_content_news', 20, 1 );
 
-function pc_display_home_content_news( $settings_home ) {
+	function pc_display_home_content_news( $settings_home ) {
 
-    $home_news = get_posts(array(
-        'post_type' => NEWS_POST_SLUG,
-        'posts_per_page' => 4
+		// liste
+		$home_news = get_posts(array(
+			'post_type' => NEWS_POST_SLUG,
+			'posts_per_page' => 4
+		));
+		// titre de la section
+		$title = ( isset($settings_home['content-news-title']) && $settings_home['content-news-title'] != '' ) ? $settings_home['content-news-title'] : 'Actualités';
+		// affichage des résumés de pages
+		if ( count($home_news) > 0 ) {
+			echo '<h2 class="home-news-title fs-bloc">'.$title.'</h2>';
+			foreach ($home_news as $key => $post) {
+				pc_display_post_resum( $post->ID, 'st--news', 3, true );
+			}
+		}
+		pc_add_fake_st( count($home_news) );
 
-	));
-	
-	$title = ( isset($settings_home['content-news-title']) && $settings_home['content-news-title'] != '' ) ? $settings_home['content-news-title'] : 'Actualités';
-
-    if ( count($home_news) > 0 ) {
-		echo '<h2 class="home-news-title fs-bloc">'.$title.'</h2>';
-        foreach ($home_news as $post) { pc_display_post_resum( $post->ID, 'st--news', 3, true ); }
 	}
-	pc_add_fake_st( count($home_news) );
-
-}
 
 
 /*=====  FIN Dernières actualités dans l'accueil  =====*/
