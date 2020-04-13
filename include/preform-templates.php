@@ -268,13 +268,15 @@ add_filter( 'wp_nav_menu_objects', 'pc_news_nav_page_parent_active', NULL, 2 );
 		// si menu d'entête
 		if ( $args->theme_location == 'nav-header' ) {
 
-			// si single-news.php
+			// si c'est une actualité d'afficher
 			if ( is_singular( NEWS_POST_SLUG ) ) {
 
 				// page qui publie les actus
-				$news_page = pc_get_page_by_custom_content( NEWS_POST_SLUG, 'object' );
-				// si la page qui publie les actus a un parent ou pas
-				$id_to_search = ( $news_page->post_parent > 0 ) ? $news_page->post_parent : $news_page->ID;
+				$post = pc_get_page_by_custom_content( NEWS_POST_SLUG, 'object' );
+				if ( $post ) {
+					// si la page qui publie les actus a un parent ou pas
+					$id_to_search = ( $post->post_parent > 0 ) ? $post->post_parent : $post->ID;
+				}
 
 			}
 			
