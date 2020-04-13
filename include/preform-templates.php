@@ -98,17 +98,17 @@ add_action( 'pc_page_content_footer', 'pc_display_news_main_footer_nav_links', 3
 	
 add_filter( 'pc_filter_schema_post', 'pc_news_schema', 10, 3 );
 
-	function pc_news_schema( $schema_post, $post, $post_metas ) {
+	function pc_news_schema( $schema, $post, $post_metas ) {
 
 		if ( $post->post_type == NEWS_POST_SLUG ) {
-			$schema_post['@type'] = 'NewsArticle';
+			$schema['@type'] = 'NewsArticle';
 		}
 		if ( isset($post_metas['content-from']) && $post_metas['content-from'][0] == 'news' ) {
 			// suppression schema article dans la liste d'actualités
-			$schema_post = array();
+			$schema = array();
 		}
 
-		return $schema_post;
+		return $schema;
 
 	}
 
@@ -185,9 +185,9 @@ add_filter( 'pc_filter_css_custom', 'pc_news_css_custom', 1 );
 
 /*----------  Données structurées  ----------*/
 
-add_filter( 'pc_filter_schema_home', 'pc_home_news_schema' );
+add_filter( 'pc_filter_schema_collection_page_home', 'pc_home_news_schema' );
 
-	function pc_home_news_schema( $home_schema ) {
+	function pc_home_news_schema( $collection_page ) {
 
 		// liste
 		$home_news = get_posts(array(
@@ -209,7 +209,7 @@ add_filter( 'pc_filter_schema_home', 'pc_home_news_schema' );
 
 				// ajout données structurées
 				// cf. fn-template_home.php
-				$home_schema['mainEntity']['itemListElement'][] = array(
+				$collection_page['mainEntity']['itemListElement'][] = array(
 					'@type' => 'ListItem',
 					'name' => $post->post_title,
 					'description' => pc_get_page_excerpt( $post_id, $post_metas ),
@@ -225,7 +225,7 @@ add_filter( 'pc_filter_schema_home', 'pc_home_news_schema' );
 			}
 		}
 
-		return $home_schema;
+		return $collection_page;
 
 	}
 
