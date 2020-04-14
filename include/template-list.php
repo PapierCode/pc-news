@@ -64,7 +64,6 @@ if ( $news_query->have_posts() ) {
 
 		pc_display_post_resum( $news_query->post->ID, 'st--news', 2 );
 		// données structurées
-		$st_schema['position'] = $news_query->current_post + 1;
 		$news_schema['mainEntity']['itemListElement'][] = $st_schema;
 
 	}

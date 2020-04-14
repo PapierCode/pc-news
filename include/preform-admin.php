@@ -70,14 +70,30 @@ add_filter( 'pc_filter_page_content_from', 'pc_add_news_to_page', 10, 1 );
 
     function pc_add_news_to_page( $page_content_from ) {
 
-        $page_content_from['news'] = array(
-            'Liste d\'actualités',
-            dirname( __FILE__ ).'/template-list.php'
-        );
+		$page_content_from['news'] = array(
+			'Liste d\'actualités',
+			dirname( __FILE__ ).'/template-list.php'
+		);
 
         return $page_content_from;
         
-    }
+	}
+	
+add_filter( 'pc_filter_metabox_select_content_from', 'pc_news_list_display_one_time', 10, 2 );
+
+	function pc_news_list_display_one_time( $metabox_select_content_from, $post ) {
+
+		$post_news_list = pc_get_page_by_custom_content( NEWS_POST_SLUG, 'object' );
+
+		if( is_object( $post_news_list ) && $post_news_list->ID != $post->ID ) {
+
+			unset( $metabox_select_content_from[NEWS_POST_SLUG] );
+
+		}
+
+		return $metabox_select_content_from;
+
+	}
 
 
 /*=====  FIN Ajout de l'option dans les pages  =====*/
