@@ -2,7 +2,7 @@
 /**
 *
 * Création du post Actualité
-**
+*
 **/
 
 
@@ -11,7 +11,7 @@ if ( class_exists( 'PC_Add_Custom_Post' ) && class_exists( 'PC_Add_Admin_Page' )
 
 	/*----------  Labels  ----------*/
 
-	$post_news_labels = array (
+	$news_post_labels = array (
 		'name'                  => 'Actualités',
 		'singular_name'         => 'Actualité',
 		'menu_name'             => 'Actualités',
@@ -32,14 +32,13 @@ if ( class_exists( 'PC_Add_Custom_Post' ) && class_exists( 'PC_Add_Admin_Page' )
 		'show_in_nav_menus' => false,
 		'supports'          => array( 'title', 'editor' ),
 		'rewrite'			=> array( 'slug' => 'news-actualites'),
-		'taxonomies'		=> array( NEWS_TAX_SLUG ),
 		'has_archive'		=> false
 	);
 
 
 	/*----------  Déclaration  ----------*/
 
-	$news_post_declaration = new PC_Add_Custom_Post( NEWS_POST_SLUG, $post_news_labels, $news_post_args );
+	$news_post_declaration = new PC_Add_Custom_Post( NEWS_POST_SLUG, $news_post_labels, $news_post_args );
 
 
 } // FIN if class_exists(PC_Add_Custom_Post)

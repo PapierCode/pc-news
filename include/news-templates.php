@@ -4,9 +4,9 @@
  * Intégration aux templates du thème Préformaté
  * 
  ** Redirection vers la template page
- ** Afficher le filtre en cours
- ** Date dans le résumé
+ ** Résumé (st)
  ** Single
+ ** SEO
  ** Dernières actualités dans l'accueil
  ** Item menu actif
  * 
@@ -17,31 +17,32 @@
 =            Redirection vers la template page            =
 =========================================================*/
 
-add_filter( 'single_template', 'pc_news_add_to_page', 999, 1 );
+add_filter( 'single_template', 'pc_news_single_template', 999, 1 );
 
-function pc_news_add_to_page( $single_template ) {
+	function pc_news_single_template( $single_template ) {
 
-    if ( is_singular( NEWS_POST_SLUG ) ) {
-        //$single_template = dirname( __FILE__ ).'\template-single.php';
-        $single_template = get_template_directory().'/page.php';
-    }
+		if ( is_singular( NEWS_POST_SLUG ) ) {
+			$single_template = get_template_directory().'/page.php';
+		}
 
-    return $single_template;
+		return $single_template;
 
-}
+	}
 
 
 /*=====  FIN Redirection vers la template page  =====*/
 
-/*======================================
-=            Date le résumé            =
-======================================*/
+/*==============================
+=            Résumé            =
+==============================*/
 
-add_action( 'pc_action_post_resum_after_start', 'pc_news_add_to_post_resum', 10, 1 );
+/*----------  Ajout de la date  ----------*/
 
-    function pc_news_add_to_post_resum( $post_id ) {
+add_action( 'pc_action_post_resum_after_start', 'pc_news_resum_add_date', 10, 1 );
 
-		if ( get_post_type( $post_id ) == 'news' ) {
+    function pc_news_resum_add_date( $post_id ) {
+
+		if ( get_post_type( $post_id ) == NEWS_POST_SLUG ) {
 
 			echo '<time class="st-date" datetime="'.get_the_date('c',$post_id).'">Actualité du <span>'.get_the_date('',$post_id).'</span></time>';
 
@@ -50,7 +51,7 @@ add_action( 'pc_action_post_resum_after_start', 'pc_news_add_to_post_resum', 10,
 	}
 	
 
-/*=====  FIN Date le résumé  =====*/
+/*=====  FIN Résumé  =====*/
 
 /*==============================
 =            Single            =
@@ -58,9 +59,9 @@ add_action( 'pc_action_post_resum_after_start', 'pc_news_add_to_post_resum', 10,
 
 /*----------  Date  ----------*/
 
-add_action( 'pc_page_content_before', 'pc_display_news_main_date', 35, 1 );
+add_action( 'pc_page_content_before', 'pc_news_main_add_date', 35, 1 );
 
-	function pc_display_news_main_date( $post ) {
+	function pc_news_main_add_date( $post ) {
 
 		if ( $post->post_type == NEWS_POST_SLUG ) {
 
@@ -73,9 +74,9 @@ add_action( 'pc_page_content_before', 'pc_display_news_main_date', 35, 1 );
 
 /*----------  Page précédente / retour liste  ----------*/
 
-add_action( 'pc_page_content_footer', 'pc_display_news_main_footer_nav_links', 30, 1 );
+add_action( 'pc_page_content_footer', 'pc_news_main_footer_add_back_link', 30, 1 );
 
-	function pc_display_news_main_footer_nav_links( $post ) {
+	function pc_news_main_footer_add_back_link( $post ) {
 
 		if ( $post->post_type == NEWS_POST_SLUG ) {
 
@@ -84,7 +85,7 @@ add_action( 'pc_page_content_footer', 'pc_display_news_main_footer_nav_links', 3
 			if ( $wp_referer ) {
 				$back_link = $wp_referer;
 			} else {
-				$back_link = pc_get_page_by_custom_content(NEWS_POST_SLUG);
+				$back_link = pc_get_page_by_custom_content( NEWS_POST_SLUG );
 			}
 
 			echo '<nav class="main-footer-nav"><a href="'.$back_link.'" class="btn" title="Page précédente">'.pc_svg('arrow',null,'svg_block').'<span>Retour</span></a></nav>';
@@ -94,16 +95,22 @@ add_action( 'pc_page_content_footer', 'pc_display_news_main_footer_nav_links', 3
 	}
 
 
+/*=====  FIN Single  =====*/
+
+/*===========================
+=            SEO            =
+===========================*/
+
 /*----------  Données structurées  ----------*/
 	
-add_filter( 'pc_filter_schema_post', 'pc_news_schema', 10, 3 );
+add_filter( 'pc_filter_schema_post', 'pc_news_edit_schema_type', 10, 3 );
 
-	function pc_news_schema( $schema, $post, $post_metas ) {
+	function pc_news_edit_schema_type( $schema, $post, $post_metas ) {
 
 		if ( $post->post_type == NEWS_POST_SLUG ) {
 			$schema['@type'] = 'NewsArticle';
 		}
-		if ( isset($post_metas['content-from']) && $post_metas['content-from'][0] == 'news' ) {
+		if ( isset($post_metas['content-from']) && $post_metas['content-from'][0] == NEWS_POST_SLUG ) {
 			// suppression schema article dans la liste d'actualités
 			$schema = array();
 		}
@@ -113,11 +120,11 @@ add_filter( 'pc_filter_schema_post', 'pc_news_schema', 10, 3 );
 	}
 
 
-/*----------  Métas titre & description, image de partage, custom CSS  ----------*/
+/*----------  Métas titre & description, image de partage  ----------*/
 
-add_filter( 'pc_filter_meta_title', 'pc_news_meta_title', 1 );
+add_filter( 'pc_filter_meta_title', 'pc_news_edit_meta_title', 1 );
 
-	function pc_news_meta_title( $meta_title ) {
+	function pc_news_edit_meta_title( $meta_title ) {
 
 		$post_id = get_the_id();
 		if ( get_post_type( $post_id ) == NEWS_POST_SLUG ) {
@@ -129,9 +136,9 @@ add_filter( 'pc_filter_meta_title', 'pc_news_meta_title', 1 );
 
 	}
 
-add_filter( 'pc_filter_meta_description', 'pc_news_meta_description', 1 );
+add_filter( 'pc_filter_meta_description', 'pc_news_edit_meta_description', 1 );
 
-	function pc_news_meta_description( $meta_description ) {
+	function pc_news_edit_meta_description( $meta_description ) {
 
 		$post_id = get_the_id();
 		if ( get_post_type( $post_id ) == NEWS_POST_SLUG ) {
@@ -143,9 +150,9 @@ add_filter( 'pc_filter_meta_description', 'pc_news_meta_description', 1 );
 
 	}
 
-add_filter( 'pc_filter_img_to_share', 'pc_news_img_to_share', 1 );
+add_filter( 'pc_filter_img_to_share', 'pc_news_edit_img_to_share', 1 );
 
-	function pc_news_img_to_share( $img_to_share ) {
+	function pc_news_edit_img_to_share( $img_to_share ) {
 
 		$post_id = get_the_id();
 		if ( get_post_type( $post_id ) == NEWS_POST_SLUG ) {
@@ -159,25 +166,8 @@ add_filter( 'pc_filter_img_to_share', 'pc_news_img_to_share', 1 );
 
 	}
 
-add_filter( 'pc_filter_css_custom', 'pc_news_css_custom', 1 );
 
-	function pc_news_css_custom( $css_custom ) {
-
-		$post_id = get_the_id();
-		if ( get_post_type( $post_id ) == NEWS_POST_SLUG ) {
-			global $settings_project;
-			$post_metas = get_post_meta( $post_id );
-			if ( isset( $post_metas['thumbnail-img'] ) ) {
-				if ( $settings_project['theme'] == 'fullscreen' ) { $css_custom .= pc_fs_main_header_css_bg($post_metas['thumbnail-img'][0]); }
-			}
-		}
-
-		return $css_custom;
-
-	}
-	
-
-/*=====  FIN Single  =====*/
+/*=====  FIN SEO  =====*/
 
 /*===========================================================
 =            Dernières actualités dans l'accueil            =
@@ -185,18 +175,18 @@ add_filter( 'pc_filter_css_custom', 'pc_news_css_custom', 1 );
 
 /*----------  Données structurées  ----------*/
 
-add_filter( 'pc_filter_schema_collection_page_home', 'pc_home_news_schema' );
+add_filter( 'pc_filter_home_schema_collection_page', 'pc_news_edit_schema_home' );
 
-	function pc_home_news_schema( $collection_page ) {
+	function pc_news_edit_schema_home( $collection_page ) {
 
 		// liste
-		$home_news = get_posts(array(
+		$news_home_posts = get_posts(array(
 			'post_type' => NEWS_POST_SLUG,
 			'posts_per_page' => 4
 		));
 
-		if ( count($home_news) > 0 ) {
-			foreach ($home_news as $key => $post) {
+		if ( count($news_home_posts) > 0 ) {
+			foreach ($news_home_posts as $key => $post) {
 				
 				$post_id = $post->ID;
 				$post_metas = get_post_meta($post_id);
@@ -232,9 +222,9 @@ add_filter( 'pc_filter_schema_collection_page_home', 'pc_home_news_schema' );
 
 /*----------  Affichage  ----------*/
 
-add_action( 'pc_home_content', 'pc_display_home_content_news', 20, 1 );
+add_action( 'pc_home_content', 'pc_news_add_last_to_home', 20, 1 );
 
-	function pc_display_home_content_news( $settings_home ) {
+	function pc_news_add_last_to_home( $settings_home ) {
 
 		// liste
 		$home_news = get_posts(array(
@@ -245,12 +235,20 @@ add_action( 'pc_home_content', 'pc_display_home_content_news', 20, 1 );
 		$title = ( isset($settings_home['content-news-title']) && $settings_home['content-news-title'] != '' ) ? $settings_home['content-news-title'] : 'Actualités';
 		// affichage des résumés de pages
 		if ( count($home_news) > 0 ) {
-			echo '<h2 class="home-news-title fs-bloc">'.$title.'</h2>';
+
+			echo '<h2 class="home-news-title">'.$title.'</h2>';
+
+			// hook avant la liste
+			do_action( 'pc_home_news_st_list_before', $home_news, 'st--news' );
+
 			foreach ($home_news as $key => $post) {
+
 				pc_display_post_resum( $post->ID, 'st--news', 3, true );
 			}
+
+			// hook après la liste
+			do_action( 'pc_home_news_st_list_after', $home_news, 'st--news' );
 		}
-		pc_add_fake_st( count($home_news) );
 
 	}
 
@@ -261,9 +259,9 @@ add_action( 'pc_home_content', 'pc_display_home_content_news', 20, 1 );
 =            Item menu actif            =
 =======================================*/
 
-add_filter( 'wp_nav_menu_objects', 'pc_news_nav_page_parent_active', NULL, 2 );
+add_filter( 'wp_nav_menu_objects', 'pc_news_edit_nav_parent_active', NULL, 2 );
 
-	function pc_news_nav_page_parent_active( $menu_items, $args ) {
+	function pc_news_edit_nav_parent_active( $menu_items, $args ) {
 
 		// si menu d'entête
 		if ( $args->theme_location == 'nav-header' ) {

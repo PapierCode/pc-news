@@ -21,16 +21,6 @@ $news_query_args = array(
     'paged' => $news_page_number
 );
 
-if ( get_query_var( NEWS_TAX_QUERY_VAR ) ) {
-    $news_query_args['tax_query'] = array(
-        array (
-            'taxonomy' => NEWS_TAX_SLUG,
-            'field' => 'slug',
-            'terms' => get_query_var( NEWS_TAX_QUERY_VAR )
-        )
-    );
-}
-
 $news_query = new WP_Query( $news_query_args );
 
 
@@ -59,6 +49,9 @@ if ( $news_query->have_posts() ) {
 	);
 	global $st_schema;
 
+	// hook avant la liste
+	add_action( 'pc_news_list_before', $post, 'st--news' );
+
 	// affichage des actus
     while ( $news_query->have_posts() ) { $news_query->the_post();
 
@@ -67,15 +60,17 @@ if ( $news_query->have_posts() ) {
 		$news_schema['mainEntity']['itemListElement'][] = $st_schema;
 
 	}
-	pc_add_fake_st( count($news_query->posts), 'st--news' );
+	
+	// hook après la liste
+	add_action( 'pc_news_list_after', $post, 'st--news' );
 
 	// affichage données structurées
 	echo '<script type="application/ld+json">'.json_encode($news_schema,JSON_UNESCAPED_SLASHES).'</script>';
 	
 	// pagination
-	add_action( 'pc_page_content_footer', 'pc_display_main_footer_news_pager', 25 );
+	add_action( 'pc_page_content_footer', 'pc_news_list_add_pager', 25 );
 
-		function pc_display_main_footer_news_pager() {
+		function pc_news_list_add_pager() {
 			
 			global $news_query, $news_page_number;
 			echo '<nav class="main-footer-nav">';
