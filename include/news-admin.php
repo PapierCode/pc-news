@@ -73,7 +73,7 @@ add_filter( 'pc_filter_page_content_from', 'pc_news_admin_edit_page_content_from
 
 		$page_content_from[NEWS_POST_SLUG] = array(
 			'Liste d\'actualités',
-			dirname( __FILE__ ).'\news-template-list.php'
+			dirname( __FILE__ ).'/news-template-list.php'
 		);
 
         return $page_content_from;
