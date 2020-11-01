@@ -6,7 +6,7 @@
  */  
 
  
-global $news_query, $news_page_number;
+global $settings_project, $news_query, $news_page_number;
 
 // page en cours (pager)
 $news_page_number = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
@@ -49,8 +49,7 @@ if ( $news_query->have_posts() ) {
 	);
 	global $st_schema;
 
-	// hook avant la liste
-	add_action( 'pc_news_list_before', $post, 'st--news' );
+	echo '<div class="st-list st-list--news">';
 
 	// affichage des actus
     while ( $news_query->have_posts() ) { $news_query->the_post();
@@ -60,9 +59,10 @@ if ( $news_query->have_posts() ) {
 		$news_schema['mainEntity']['itemListElement'][] = $st_schema;
 
 	}
+
+	do_action( 'pc_st_list_fake', count($news_query->get_posts()), 'st--news' );
 	
-	// hook après la liste
-	add_action( 'pc_news_list_after', $post, 'st--news' );
+	echo '</div>';
 
 	// affichage données structurées
 	echo '<script type="application/ld+json">'.json_encode($news_schema,JSON_UNESCAPED_SLASHES).'</script>';

@@ -238,16 +238,14 @@ add_action( 'pc_home_content', 'pc_news_add_last_to_home', 20, 1 );
 
 			echo '<h2 class="home-news-title">'.$title.'</h2>';
 
-			// hook avant la liste
-			do_action( 'pc_home_news_st_list_before', $home_news, 'st--news' );
-
 			foreach ($home_news as $key => $post) {
-
 				pc_display_post_resum( $post->ID, 'st--news', 3, true );
 			}
 
-			// hook après la liste
-			do_action( 'pc_home_news_st_list_after', $home_news, 'st--news' );
+			$nb_home_news = count( $home_news );
+			if ( $nb_home_news < 4 ) {
+				do_action( 'pc_st_list_fake', $nb_home_news, 'st--news' );
+			}
 		}
 
 	}
