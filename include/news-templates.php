@@ -237,6 +237,7 @@ add_action( 'pc_home_content', 'pc_news_add_last_to_home', 20, 1 );
 		if ( count($home_news) > 0 ) {
 
 			echo '<h2 class="home-news-title">'.$title.'</h2>';
+			echo '<div class="st-list st-list--news">';
 
 			foreach ($home_news as $key => $post) {
 				pc_display_post_resum( $post->ID, 'st--news', 3, true );
@@ -246,6 +247,8 @@ add_action( 'pc_home_content', 'pc_news_add_last_to_home', 20, 1 );
 			if ( $nb_home_news < 4 ) {
 				do_action( 'pc_st_list_fake', $nb_home_news, 'st--news' );
 			}
+
+			echo '</div>';
 		}
 
 	}
