@@ -157,8 +157,8 @@ add_filter( 'pc_filter_img_to_share', 'pc_news_edit_img_to_share', 1 );
 		$post_id = get_the_id();
 		if ( get_post_type( $post_id ) == NEWS_POST_SLUG ) {
 			$post_metas = get_post_meta( $post_id );
-			if ( isset( $post_metas['thumbnail-img'] ) ) {
-				$img_to_share = wp_get_attachment_image_src($post_metas['thumbnail-img'][0],'share')[0];
+			if ( isset( $post_metas['visual-id'] ) ) {
+				$img_to_share = wp_get_attachment_image_src($post_metas['visual-id'][0],'share')[0];
 			}
 		}
 
@@ -191,8 +191,8 @@ add_filter( 'pc_filter_home_schema_collection_page', 'pc_news_edit_schema_home' 
 				$post_id = $post->ID;
 				$post_metas = get_post_meta($post_id);
 
-				if ( isset( $post_metas['thumbnail-img'] ) ) {
-					$img = pc_get_img( $post_metas['thumbnail-img'][0], 'share', 'datas' );
+				if ( isset( $post_metas['visual-id'] ) ) {
+					$img = pc_get_img( $post_metas['visual-id'][0], 'share', 'datas' );
 				} else {
 					$img = pc_get_img_default_to_share();
 				}

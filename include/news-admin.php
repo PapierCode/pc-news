@@ -21,12 +21,14 @@ add_filter( 'pc_filter_settings_home_fields', 'pc_news_admin_edit_settings_home'
 
 	function pc_news_admin_edit_settings_home( $fields ) {
 
-		$fields[0]['fields'][] = array(
+		$news_title_home_field = array(
 			'type'      => 'text',
 			'label_for' => 'news-title',
 			'label'     => 'Titre des actualités',
 			'css'       => 'width:100%'
 		);
+
+		$fields[0]['fields'][] = $news_title_home_field;
 
 		return $fields;
 
@@ -105,7 +107,7 @@ add_filter( 'pc_filter_metabox_select_content_from', 'pc_news_admin_edit_page_co
 ===================================================*/
 
 // reprise de métaboxes du thème
-add_filter( 'pc_filter_metabox_thumbnail_for', 'pc_news_admin_edit_metabox_for', 10, 1 );
+add_filter( 'pc_filter_metabox_visual_for', 'pc_news_admin_edit_metabox_for', 10, 1 );
 add_filter( 'pc_filter_metabox_resum_for', 'pc_news_admin_edit_metabox_for', 10, 1 );
 add_filter( 'pc_filter_metabox_seo_for', 'pc_news_admin_edit_metabox_for', 10, 1 );
 
