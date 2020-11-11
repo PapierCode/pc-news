@@ -222,7 +222,7 @@ add_filter( 'pc_filter_home_schema_collection_page', 'pc_news_edit_schema_home' 
 
 /*----------  Affichage  ----------*/
 
-add_action( 'pc_home_content', 'pc_news_add_last_to_home', 20, 1 );
+add_action( 'pc_home_content', 'pc_news_add_last_to_home', 60, 1 );
 
 	function pc_news_add_last_to_home( $settings_home ) {
 
