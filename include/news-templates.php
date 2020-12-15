@@ -59,15 +59,20 @@ add_action( 'pc_action_post_resum_after_start', 'pc_news_resum_add_date', 10, 1 
 
 /*----------  Date  ----------*/
 
-add_action( 'pc_page_content_before', 'pc_news_main_add_date', 35, 1 );
+add_filter( 'pc_the_content_before', 'pc_news_main_add_date_fullscreen' );
 
-	function pc_news_main_add_date( $post ) {
+	function pc_news_main_add_date_fullscreen( $before ) {
 
-		if ( $post->post_type == NEWS_POST_SLUG ) {
+		$post_id = get_the_id();
+		$post_type = get_post_type( $post_id );
 
-			echo '<time class="news-date" datetime="'.get_the_date('c',$post->ID).'">Actualité du '.get_the_date('',$post->ID).'</time>';
+		if ( $post_type == NEWS_POST_SLUG ) {
+
+			$before .= '<p><time class="news-date" datetime="'.get_the_date('c',$post_id).'">Actualité du '.get_the_date('',$post_id).'</time></p>';
 
 		}
+
+		return $before;
 
 	}
 
