@@ -93,7 +93,7 @@ add_action( 'pc_page_content_footer', 'pc_news_main_footer_add_back_link', 30, 1
 				$back_link = pc_get_page_by_custom_content( NEWS_POST_SLUG );
 			}
 
-			echo '<nav class="main-footer-nav"><a href="'.$back_link.'" class="btn" title="Page précédente">'.pc_svg('arrow',null,'svg_block').'<span>Retour</span></a></nav>';
+			echo '<nav class="main-footer-nav"><a href="'.$back_link.'" class="button" title="Page précédente">'.pc_svg('arrow',null,'svg_block').'<span>Retour</span></a></nav>';
 
 		}
 

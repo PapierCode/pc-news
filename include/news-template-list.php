@@ -47,7 +47,7 @@ if ( $news_query->have_posts() ) {
 		),
 		'isPartOf' => pc_get_schema_website()
 	);
-	global $st_schema;
+	global $post_resum_schema;
 
 	echo '<div class="st-list st-list--news">';
 
