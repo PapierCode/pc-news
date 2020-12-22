@@ -241,7 +241,7 @@ add_action( 'pc_home_content', 'pc_news_add_last_to_home', 60, 1 );
 		// affichage des résumés de pages
 		if ( count($home_news) > 0 ) {
 
-			echo '<h2 class="home-news-title">'.$title.'</h2>';
+			echo '<h2 class="home-title-sub">'.$title.'</h2>';
 			echo '<div class="st-list st-list--news">';
 
 			foreach ($home_news as $key => $post) {

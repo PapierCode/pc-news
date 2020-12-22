@@ -56,7 +56,7 @@ if ( $news_query->have_posts() ) {
 
 		pc_display_post_resum( $news_query->post->ID, 'st--news', 2 );
 		// données structurées
-		$news_schema['mainEntity']['itemListElement'][] = $st_schema;
+		$news_schema['mainEntity']['itemListElement'][] = $post_resum_schema;
 
 	}
 
