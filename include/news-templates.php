@@ -148,7 +148,7 @@ add_filter( 'pc_filter_meta_description', 'pc_news_edit_meta_description', 1 );
 		$post_id = get_the_id();
 		if ( get_post_type( $post_id ) == NEWS_POST_SLUG ) {
 			$post_metas = get_post_meta( $post_id );
-			$meta_description = pc_get_page_excerpt( $post_id, $post_metas );
+			$meta_description = pc_get_page_excerpt( $post_id, $post_metas, true );
 		}
 
 		return $meta_description;
