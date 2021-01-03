@@ -47,7 +47,6 @@ if ( $news_query->have_posts() ) {
 		),
 		'isPartOf' => pc_get_schema_website()
 	);
-	global $post_resum_schema;
 
 	echo '<div class="st-list st-list--news">';
 
@@ -56,6 +55,7 @@ if ( $news_query->have_posts() ) {
 
 		pc_display_post_resum( $news_query->post->ID, 'st--news', 2 );
 		// données structurées
+		global $post_resum_schema;
 		$news_schema['mainEntity']['itemListElement'][] = $post_resum_schema;
 
 	}
