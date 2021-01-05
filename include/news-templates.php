@@ -241,6 +241,7 @@ add_action( 'pc_home_content', 'pc_news_display_inside_home', 80, 1 );
 		// affichage des résumés de pages
 		if ( count($home_news) > 0 ) {
 
+			echo '<div class="home-news">';
 			echo '<h2 class="home-title-sub">'.$title.'</h2>';
 			echo '<div class="st-list st-list--news">';
 
@@ -253,6 +254,7 @@ add_action( 'pc_home_content', 'pc_news_display_inside_home', 80, 1 );
 				do_action( 'pc_st_list_fake', $nb_home_news, 'st--news' );
 			}
 
+			echo '</div>';
 			echo '</div>';
 		}
 
