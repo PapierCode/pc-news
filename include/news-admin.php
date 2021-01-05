@@ -107,7 +107,7 @@ add_filter( 'pc_filter_metabox_select_content_from', 'pc_news_admin_edit_page_co
 ===================================================*/
 
 // reprise de métaboxes du thème
-add_filter( 'pc_filter_metabox_visual_for', 'pc_news_admin_edit_metabox_for', 10, 1 );
+add_filter( 'pc_filter_metabox_img_for', 'pc_news_admin_edit_metabox_for', 10, 1 );
 add_filter( 'pc_filter_metabox_resum_for', 'pc_news_admin_edit_metabox_for', 10, 1 );
 add_filter( 'pc_filter_metabox_seo_for', 'pc_news_admin_edit_metabox_for', 10, 1 );
 

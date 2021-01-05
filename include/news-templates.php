@@ -181,7 +181,7 @@ add_filter( 'pc_filter_img_to_share', 'pc_news_edit_img_to_share', 1 );
 
 add_filter( 'pc_filter_home_schema_collection_page', 'pc_news_edit_schema_home' );
 
-	function pc_news_edit_schema_home( $collection_page ) {
+	function pc_news_edit_schema_home( $schema_collection_page ) {
 
 		// liste
 		$news_home_posts = get_posts(array(
@@ -203,7 +203,7 @@ add_filter( 'pc_filter_home_schema_collection_page', 'pc_news_edit_schema_home' 
 
 				// ajout données structurées
 				// cf. fn-template_home.php
-				$collection_page['mainEntity']['itemListElement'][] = array(
+				$schema_collection_page['mainEntity']['itemListElement'][] = array(
 					'@type' => 'ListItem',
 					'name' => $post->post_title,
 					'description' => pc_get_page_excerpt( $post_id, $post_metas ),
@@ -219,16 +219,16 @@ add_filter( 'pc_filter_home_schema_collection_page', 'pc_news_edit_schema_home' 
 			}
 		}
 
-		return $collection_page;
+		return $schema_collection_page;
 
 	}
 
 
 /*----------  Affichage  ----------*/
 
-add_action( 'pc_home_content', 'pc_news_add_last_to_home', 70, 1 );
+add_action( 'pc_home_content', 'pc_news_display_inside_home', 80, 1 );
 
-	function pc_news_add_last_to_home( $settings_home ) {
+	function pc_news_display_inside_home( $settings_home ) {
 
 		// liste
 		$home_news = get_posts(array(
@@ -237,6 +237,7 @@ add_action( 'pc_home_content', 'pc_news_add_last_to_home', 70, 1 );
 		));
 		// titre de la section
 		$title = ( isset($settings_home['content-news-title']) && $settings_home['content-news-title'] != '' ) ? $settings_home['content-news-title'] : 'Actualités';
+
 		// affichage des résumés de pages
 		if ( count($home_news) > 0 ) {
 
