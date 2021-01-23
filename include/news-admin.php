@@ -69,16 +69,16 @@ add_action( 'manage_'.NEWS_POST_SLUG.'_posts_custom_column', 'pc_admin_list_colu
 =            Ajout de l'option dans les pages            =
 ========================================================*/
     
-add_filter( 'pc_filter_page_content_from', 'pc_news_admin_edit_page_content_from', 10, 1 );
+add_filter( 'pc_filter_settings_project', 'pc_news_admin_edit_page_content_from' );
 
-    function pc_news_admin_edit_page_content_from( $page_content_from ) {
+    function pc_news_admin_edit_page_content_from( $settings_project ) {
 
-		$page_content_from[NEWS_POST_SLUG] = array(
+		$settings_project['page-content-from'][NEWS_POST_SLUG] = array(
 			'Liste d\'actualités',
 			dirname( __FILE__ ).'/news-template-list.php'
 		);
 
-        return $page_content_from;
+        return $settings_project;
         
 	}
 	
