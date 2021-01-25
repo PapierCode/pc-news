@@ -251,7 +251,7 @@ add_action( 'pc_home_content', 'pc_news_display_inside_home', 80, 1 );
 
 			$nb_home_news = count( $home_news );
 			if ( $nb_home_news < 4 ) {
-				do_action( 'pc_st_list_fake', $nb_home_news, 'st--news' );
+				pc_display_fake_post_resum( $nb_home_news, 'st--news' );
 			}
 
 			echo '</div>';

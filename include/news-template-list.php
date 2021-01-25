@@ -60,7 +60,7 @@ if ( $news_query->have_posts() ) {
 
 	}
 
-	do_action( 'pc_st_list_fake', count($news_query->get_posts()), 'st--news' );
+	pc_display_fake_post_resum( count($news_query->get_posts()), 'st--news' );
 	
 	echo '</div>';
 
