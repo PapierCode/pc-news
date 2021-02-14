@@ -59,8 +59,6 @@ if ( $news_query->have_posts() ) {
 		$news_schema['mainEntity']['itemListElement'][] = $post_resum_schema;
 
 	}
-
-	pc_display_fake_post_resum( count($news_query->get_posts()), 'st--news' );
 	
 	echo '</div>';
 

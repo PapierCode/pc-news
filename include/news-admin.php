@@ -41,7 +41,6 @@ add_filter( 'pc_filter_settings_home_fields', 'pc_news_admin_edit_settings_home'
 =            Actions groupées            =
 ========================================*/
 
-
 add_filter( 'bulk_actions-edit-'.NEWS_POST_SLUG, 'pc_news_admin_edit_bluk_actions' );
 
 	function pc_news_admin_edit_bluk_actions( $actions ) {

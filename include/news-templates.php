@@ -249,11 +249,6 @@ add_action( 'pc_home_content', 'pc_news_display_inside_home', 80, 1 );
 				pc_display_post_resum( $post->ID, 'st--news', 3, true );
 			}
 
-			$nb_home_news = count( $home_news );
-			if ( $nb_home_news < 4 ) {
-				pc_display_fake_post_resum( $nb_home_news, 'st--news' );
-			}
-
 			echo '</div>';
 			echo '</div>';
 		}
