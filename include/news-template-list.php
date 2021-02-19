@@ -48,7 +48,7 @@ if ( $news_query->have_posts() ) {
 		'isPartOf' => pc_get_schema_website()
 	);
 
-	echo '<div class="st-list st-list--news">';
+	echo '<ul class="st-list st-list--news reset-list">';
 
 	// affichage des actus
     while ( $news_query->have_posts() ) { $news_query->the_post();
@@ -60,7 +60,7 @@ if ( $news_query->have_posts() ) {
 
 	}
 	
-	echo '</div>';
+	echo '</ul>';
 
 	// affichage données structurées
 	echo '<script type="application/ld+json">'.json_encode($news_schema,JSON_UNESCAPED_SLASHES).'</script>';

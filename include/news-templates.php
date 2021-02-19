@@ -212,13 +212,13 @@ add_action( 'pc_home_content', 'pc_news_display_inside_home', 80, 1 );
 
 			echo '<div class="home-news">';
 			echo '<h2 class="home-title-sub">'.$title.'</h2>';
-			echo '<div class="st-list st-list--news">';
+			echo '<ul class="st-list st-list--news reset-list">';
 
 			foreach ($home_news as $key => $post) {
 				pc_display_post_resum( $post->ID, 'st--news', 3, true );
 			}
 
-			echo '</div>';
+			echo '</ul>';
 			echo '</div>';
 		}
 
