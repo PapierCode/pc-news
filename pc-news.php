@@ -4,7 +4,7 @@
 Plugin Name: [PC] News
 Plugin URI: www.papier-code.fr
 Description: Actualités
-Version: 1.2.2
+Version: 1.2.3
 Author: Papier Codé
 */
 

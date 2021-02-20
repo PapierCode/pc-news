@@ -65,7 +65,7 @@ add_filter( 'pc_the_content_before', 'pc_news_main_add_date_fullscreen' );
 
 		if ( is_singular( NEWS_POST_SLUG ) ) {
 
-			$post_id = get_the_id();
+			$post_id = get_the_ID();
 
 			$before .= '<p><time class="news-date" datetime="'.get_the_date('c',$post_id).'">Actualité du '.get_the_date('',$post_id).'</time></p>';
 
@@ -130,7 +130,7 @@ add_filter( 'pc_filter_seo_metas', 'pc_news_edit_seo_metas' );
 
 	function pc_news_edit_seo_metas( $seo_metas ) {
 
-		$post_id = get_the_id();
+		$post_id = get_the_ID();
 		if ( get_post_type( $post_id ) == NEWS_POST_SLUG ) {
 			$post_metas = get_post_meta( $post_id );
 			$seo_metas = pc_get_post_seo_metas( $seo_metas, $post_id, $post_metas );
