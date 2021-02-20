@@ -40,7 +40,7 @@ if ( $news_query->have_posts() ) {
 		'@type'=> 'CollectionPage',
 		'name' => $post_title,
 		'headline' => $post_title,
-		'description' => pc_get_page_excerpt( $post->ID, $post_metas ),
+		'description' => pc_get_post_seo_description( $post->ID, $post_metas ),
 		'mainEntity' => array(
 			'@type' => 'ItemList',
 			'itemListElement' => array()
