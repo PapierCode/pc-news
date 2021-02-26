@@ -88,11 +88,17 @@ add_action( 'pc_page_content_footer', 'pc_news_main_footer_add_back_link', 30, 1
 			
 			if ( $wp_referer ) {
 				$back_link = $wp_referer;
+				$back_title = 'Page précédente';
+				$back_txt = 'Retour';
+				$back_ico = 'arrow';
 			} else {
 				$back_link = pc_get_page_by_custom_content( NEWS_POST_SLUG );
+				$back_title = 'Toutes les actualités';
+				$back_txt = 'd\'actualités';
+				$back_ico = 'more-16';
 			}
 
-			echo '<nav class="main-footer-nav"><a href="'.$back_link.'" class="button" title="Page précédente">'.pc_svg('arrow',null,'svg_block').'<span>Retour</span></a></nav>';
+			echo '<nav class="main-footer-nav"><a href="'.$back_link.'" class="button" title="'.$back_title.'">'.pc_svg($back_ico).'<span>'.$back_txt.'</span></a></nav>';
 
 		}
 
