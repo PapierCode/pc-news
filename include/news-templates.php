@@ -38,7 +38,7 @@ add_filter( 'single_template', 'pc_news_single_template', 999, 1 );
 
 /*----------  Ajout de la date  ----------*/
 
-add_action( 'pc_action_post_resum_after_start', 'pc_news_resum_add_date', 10, 1 );
+add_action( 'pc_post_resum_after_start', 'pc_news_resum_add_date', 10, 1 );
 
     function pc_news_resum_add_date( $post_id ) {
 
