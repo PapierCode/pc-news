@@ -57,11 +57,28 @@ add_action( 'pc_post_resum_after_start', 'pc_news_resum_add_date', 10, 1 );
 =            Single            =
 ==============================*/
 
+/*----------  Classes CSS sur la balise HTML  ----------*/
+
+add_filter( 'pc_filter_html_css_class', 'pc_news_single_html_css_class' );
+
+function pc_news_single_html_css_class( $css_classes ) {
+	
+	if ( is_singular( NEWS_POST_SLUG ) ) {
+		$css_classes[] = 'is-page';
+		$css_classes[] = 'is-news';
+	}
+
+	return $css_classes;
+
+}
+	
+
+
 /*----------  Date  ----------*/
 
-add_filter( 'pc_the_content_before', 'pc_news_main_add_date_fullscreen' );
+add_filter( 'pc_the_content_before', 'pc_news_single_main_add_date' );
 
-	function pc_news_main_add_date_fullscreen( $before ) {
+	function pc_news_single_main_add_date( $before ) {
 
 		if ( is_singular( NEWS_POST_SLUG ) ) {
 
@@ -78,9 +95,9 @@ add_filter( 'pc_the_content_before', 'pc_news_main_add_date_fullscreen' );
 
 /*----------  Page précédente / retour liste  ----------*/
 
-add_action( 'pc_page_content_footer', 'pc_news_main_footer_add_back_link', 30, 1 );
+add_action( 'pc_page_content_footer', 'pc_news_single_main_footer_add_back_link', 30, 1 );
 
-	function pc_news_main_footer_add_back_link( $post ) {
+	function pc_news_single_main_footer_add_back_link( $post ) {
 
 		if ( $post->post_type == NEWS_POST_SLUG ) {
 
@@ -154,9 +171,9 @@ add_filter( 'pc_filter_seo_metas', 'pc_news_edit_seo_metas' );
 
 /*----------  Données structurées  ----------*/
 
-add_filter( 'pc_filter_home_schema_collection_page', 'pc_news_edit_schema_home' );
+add_filter( 'pc_filter_home_schema_collection_page', 'pc_news_edit_home_schema' );
 
-	function pc_news_edit_schema_home( $schema_collection_page ) {
+	function pc_news_edit_home_schema( $schema_collection_page ) {
 
 		// liste
 		$news_home_posts = get_posts(array(
@@ -201,9 +218,9 @@ add_filter( 'pc_filter_home_schema_collection_page', 'pc_news_edit_schema_home' 
 
 /*----------  Affichage  ----------*/
 
-add_action( 'pc_home_content', 'pc_news_display_inside_home', 80, 1 );
+add_action( 'pc_home_content', 'pc_news_display_home_content', 80, 1 );
 
-	function pc_news_display_inside_home( $settings_home ) {
+	function pc_news_display_home_content( $settings_home ) {
 
 		// liste
 		$home_news = get_posts(array(
@@ -237,9 +254,9 @@ add_action( 'pc_home_content', 'pc_news_display_inside_home', 80, 1 );
 =            Item menu actif            =
 =======================================*/
 
-add_filter( 'wp_nav_menu_objects', 'pc_news_edit_nav_parent_active', NULL, 2 );
+add_filter( 'wp_nav_menu_objects', 'pc_news_single_edit_nav_parent_active', NULL, 2 );
 
-	function pc_news_edit_nav_parent_active( $menu_items, $args ) {
+	function pc_news_single_edit_nav_parent_active( $menu_items, $args ) {
 
 		// si menu d'entête
 		if ( $args->theme_location == 'nav-header' ) {
