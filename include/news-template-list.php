@@ -73,9 +73,7 @@ if ( $news_query->have_posts() ) {
 			global $news_query, $news_page_number;
 
 			if ( $news_query->found_posts > get_option( 'posts_per_page' ) ) {
-				echo '<nav class="main-footer-nav">';
-					pc_get_pager( $news_query, $news_page_number );
-				echo '</nav>';
+				pc_get_pager( $news_query, $news_page_number );
 			}
 			
 		}

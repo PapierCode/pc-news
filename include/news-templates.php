@@ -95,9 +95,9 @@ add_filter( 'pc_the_content_before', 'pc_news_single_main_add_date' );
 
 /*----------  Page précédente / retour liste  ----------*/
 
-add_action( 'pc_page_content_footer', 'pc_news_single_main_footer_add_back_link', 30, 1 );
+add_action( 'pc_page_content_after', 'pc_news_single_main_footer_add_backlink', 65 );
 
-	function pc_news_single_main_footer_add_back_link( $post ) {
+	function pc_news_single_main_footer_add_backlink( $post ) {
 
 		if ( $post->post_type == NEWS_POST_SLUG ) {
 
@@ -115,7 +115,7 @@ add_action( 'pc_page_content_footer', 'pc_news_single_main_footer_add_back_link'
 				$back_ico = 'more-16';
 			}
 
-			echo '<nav class="main-footer-nav"><a href="'.$back_link.'" class="button" title="'.$back_title.'">'.pc_svg($back_ico).'<span>'.$back_txt.'</span></a></nav>';
+			echo '<a href="'.$back_link.'" class="previous button" title="'.$back_title.'">'.pc_svg($back_ico).'<span>'.$back_txt.'</span></a>';
 
 		}
 
