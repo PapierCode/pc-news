@@ -112,7 +112,7 @@ add_action( 'pc_page_content_after', 'pc_news_single_main_footer_add_backlink', 
 				$back_link = pc_get_page_by_custom_content( NEWS_POST_SLUG );
 				$back_title = 'Toutes les actualités';
 				$back_txt = 'd\'actualités';
-				$back_ico = 'more-16';
+				$back_ico = 'more';
 			}
 
 			echo '<a href="'.$back_link.'" class="previous button" title="'.$back_title.'">'.pc_svg($back_ico).'<span>'.$back_txt.'</span></a>';
@@ -218,7 +218,7 @@ add_filter( 'pc_filter_home_schema_collection_page', 'pc_news_edit_home_schema' 
 
 /*----------  Affichage  ----------*/
 
-add_action( 'pc_home_content', 'pc_news_display_home_content', 80, 1 );
+add_action( 'pc_home_content', 'pc_news_display_home_content', 75 );
 
 	function pc_news_display_home_content( $settings_home ) {
 
