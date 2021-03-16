@@ -95,7 +95,7 @@ add_filter( 'pc_the_content_before', 'pc_news_single_main_add_date' );
 
 /*----------  Page précédente / retour liste  ----------*/
 
-add_action( 'pc_page_content_after', 'pc_news_single_main_footer_add_backlink', 65 );
+add_action( 'pc_action_page_main_footer', 'pc_news_single_main_footer_add_backlink', 20 );
 
 	function pc_news_single_main_footer_add_backlink( $post ) {
 
@@ -130,7 +130,7 @@ add_action( 'pc_page_content_after', 'pc_news_single_main_footer_add_backlink', 
 
 /*----------  Données structurées  ----------*/
 	
-add_filter( 'pc_filter_schema_post', 'pc_news_edit_schema_type', 10, 3 );
+add_filter( 'pc_filter_schema_article', 'pc_news_edit_schema_type', 10, 3 );
 
 	function pc_news_edit_schema_type( $schema, $post, $post_metas ) {
 
@@ -143,22 +143,6 @@ add_filter( 'pc_filter_schema_post', 'pc_news_edit_schema_type', 10, 3 );
 		}
 
 		return $schema;
-
-	}
-
-
-/*----------  Métas titre & description, image de partage  ----------*/
-
-add_filter( 'pc_filter_seo_metas', 'pc_news_edit_seo_metas' );
-
-	function pc_news_edit_seo_metas( $seo_metas ) {
-
-		$post_id = get_the_ID();
-		if ( get_post_type( $post_id ) == NEWS_POST_SLUG ) {
-			$post_metas = get_post_meta( $post_id );
-			$seo_metas = pc_get_post_seo_metas( $seo_metas, $post_id, $post_metas );
-		}
-		return $seo_metas;
 
 	}
 
@@ -218,7 +202,7 @@ add_filter( 'pc_filter_home_schema_collection_page', 'pc_news_edit_home_schema' 
 
 /*----------  Affichage  ----------*/
 
-add_action( 'pc_home_content', 'pc_news_display_home_content', 75 );
+add_action( 'pc_action_home_main_content', 'pc_news_display_home_content', 40 );
 
 	function pc_news_display_home_content( $settings_home ) {
 

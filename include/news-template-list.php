@@ -66,7 +66,7 @@ if ( $news_query->have_posts() ) {
 	echo '<script type="application/ld+json">'.json_encode($news_schema,JSON_UNESCAPED_SLASHES).'</script>';
 	
 	// pagination
-	add_action( 'pc_page_content_after', 'pc_news_list_add_pager', 65 );
+	add_action( 'pc_action_page_main_footer', 'pc_news_list_add_pager', 65 );
 
 		function pc_news_list_add_pager() {
 			
