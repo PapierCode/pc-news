@@ -32,15 +32,13 @@ $news_query = new WP_Query( $news_query_args );
 
 if ( $news_query->have_posts() ) {
 
-	$post_title = get_the_title( $post->ID );
-
 	// données structurées
 	$news_schema = array(
 		'@context' => 'http://schema.org/',
 		'@type'=> 'CollectionPage',
-		'name' => $post_title,
-		'headline' => $post_title,
-		'description' => pc_get_post_seo_description( $post->ID, $post_metas ),
+		'name' => pc_get_post_seo_title( $post, $post_metas ),
+		'headline' => pc_get_post_seo_title( $post, $post_metas ),
+		'description' => pc_get_post_seo_description( $post, $post_metas ),
 		'mainEntity' => array(
 			'@type' => 'ItemList',
 			'itemListElement' => array()

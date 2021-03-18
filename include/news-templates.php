@@ -181,7 +181,7 @@ add_filter( 'pc_filter_home_schema_collection_page', 'pc_news_edit_home_schema' 
 				// cf. fn-template_home.php
 				$schema_collection_page['mainEntity']['itemListElement'][] = array(
 					'@type' => 'ListItem',
-					'name' => $post->post_title,
+					'name' => pc_get_post_seo_title( $post, $post_metas ),
 					'description' => pc_get_post_seo_description( $post, $post_metas ),
 					'url' => get_the_permalink($post_id),
 					'image' => array(
