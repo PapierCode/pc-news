@@ -1,7 +1,7 @@
 <?php
 /**
  * 
- * Liste des actualités
+ * [PC] News template : template archive
  * 
  */  
 
@@ -32,29 +32,42 @@ $news_query = new WP_Query( $news_query_args );
 
 if ( $news_query->have_posts() ) {
 
+	global $pc_post;
+
 	// données structurées
 	$news_schema = array(
 		'@context' => 'http://schema.org/',
 		'@type'=> 'CollectionPage',
-		'name' => pc_get_post_seo_title( $post, $post_metas ),
-		'headline' => pc_get_post_seo_title( $post, $post_metas ),
-		'description' => pc_get_post_seo_description( $post, $post_metas ),
+		'name' => $pc_post->get_seo_meta_title(),
+		'headline' => $pc_post->get_seo_meta_title(),
+		'description' => $pc_post->get_seo_meta_description(),
 		'mainEntity' => array(
 			'@type' => 'ItemList',
 			'itemListElement' => array()
 		),
 		'isPartOf' => pc_get_schema_website()
 	);
+	// compteur position itemListElement
+	$news_list_item_key = 1;
 
 	echo '<ul class="st-list st-list--news reset-list">';
 
 	// affichage des actus
     while ( $news_query->have_posts() ) { $news_query->the_post();
+		
+		// début d'élément
+		echo '<li class="st st--news">';
 
-		pc_display_post_resum( $news_query->post->ID, 'st--news', 2 );
-		// données structurées
-		global $post_resum_schema;
-		$news_schema['mainEntity']['itemListElement'][] = $post_resum_schema;
+			$news_post = new PC_Post( $news_query->post );
+
+			// affichage résumé
+			$news_post->display_card();
+			// données structurées
+			$news_schema['mainEntity']['itemListElement'][] = $news_post->get_schema_list_item( $news_list_item_key );
+			$news_list_item_key++;
+		
+		// fin d'élément
+		echo '</li>';
 
 	}
 	
@@ -64,9 +77,9 @@ if ( $news_query->have_posts() ) {
 	echo '<script type="application/ld+json">'.json_encode($news_schema,JSON_UNESCAPED_SLASHES).'</script>';
 	
 	// pagination
-	add_action( 'pc_action_page_main_footer', 'pc_news_list_add_pager', 65 );
+	add_action( 'pc_action_page_main_footer', 'pc_news_display_archive_pager', 65 );
 
-		function pc_news_list_add_pager() {
+		function pc_news_display_archive_pager() {
 			
 			global $news_query, $news_page_number;
 

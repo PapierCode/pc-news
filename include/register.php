@@ -1,12 +1,12 @@
 <?php
 /**
 *
-* Création du post Actualité
+* [PC] News : création du post
 *
 **/
 
 
-if ( class_exists( 'PC_Add_Custom_Post' ) && class_exists( 'PC_Add_Admin_Page' ) ) {
+if ( class_exists( 'PC_Add_Custom_Post' ) ) {
 
 
 	/*----------  Labels  ----------*/

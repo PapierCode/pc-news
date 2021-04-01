@@ -4,7 +4,7 @@
 Plugin Name: [PC] News
 Plugin URI: www.papier-code.fr
 Description: Actualités
-Version: 1.3.3
+Version: 2.0.0
 Author: Papier Codé
 */
 
@@ -20,11 +20,14 @@ add_action( 'plugins_loaded', 'pc_plugin_news_init' );
 
 		/*----------  Include  ----------*/
 
-		// création du post
-		include 'include/news-post.php';
-		// intégration à l'administration du thème préformaté
-		include 'include/news-admin.php';
-		// intégration aux templates du thème préformaté
-		include 'include/news-templates.php';
+		include 'include/register.php';
+		include 'include/fields.php';
+
+		include 'include/admin.php';
+		
+		include 'include/template-home.php';
+		include 'include/template-card.php';
+		include 'include/template-single.php';
+		include 'include/template-schemas.php';
 
 	}
