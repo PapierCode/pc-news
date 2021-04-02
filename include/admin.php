@@ -90,8 +90,8 @@ add_filter( 'bulk_actions-edit-'.NEWS_POST_SLUG, 'pc_news_edit_bluk_actions' );
 /*----------  Colonne visuel  ----------*/
 
 // reprise WPréform
-add_action( 'manage_'.NEWS_POST_SLUG.'_posts_columns', 'pc_admin_list_column_img', 10, 2);
-add_action( 'manage_'.NEWS_POST_SLUG.'_posts_custom_column', 'pc_admin_list_column_img_content', 10, 2);
+add_action( 'manage_'.NEWS_POST_SLUG.'_posts_columns', 'pc_page_edit_manage_posts_columns', 10, 2);
+add_action( 'manage_'.NEWS_POST_SLUG.'_posts_custom_column', 'pc_page_manage_posts_custom_column', 10, 2);
 
 
 /*=====  FIN Liste d'article  =====*/
