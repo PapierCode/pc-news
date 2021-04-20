@@ -139,7 +139,7 @@ add_action( 'pc_action_page_main_footer', 'pc_news_display_single_backlink', 20 
 				$back_ico = 'more';
 			}
 
-			echo '<a href="'.$back_link.'" class="previous button" title="'.$back_title.'">'.pc_svg($back_ico).'<span>'.$back_txt.'</span></a>';
+			echo '<a href="'.$back_link.'" class="main-footer-prev button" title="'.$back_title.'">'.pc_svg($back_ico).'<span>'.$back_txt.'</span></a>';
 
 		}
 
