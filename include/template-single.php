@@ -94,6 +94,33 @@ function pc_news_edit_single_nav_item_active( $menu_items, $args ) {
 
 /*=====  FIN Menu item actif  =====*/
 
+/*====================================
+=            Fil d'ariane            =
+====================================*/
+
+add_filter( 'pc_filter_breadcrumb', 'pc_news_edit_breadcrumb' );
+
+	function pc_news_edit_breadcrumb( $links ) {
+
+		if ( is_singular( NEWS_POST_SLUG ) ) {
+
+			$post = pc_get_page_by_custom_content( NEWS_POST_SLUG, 'object' );
+			$pc_post = new PC_Post( $post );
+
+			$links[] = array(
+				'name' => $pc_post->get_card_title(),
+				'permalink' => $pc_post->permalink
+			);
+
+		}
+
+		return $links;
+
+	}
+
+
+/*=====  FIN Fil d'ariane  =====*/
+
 /*===============================
 =            Contenu            =
 ===============================*/
