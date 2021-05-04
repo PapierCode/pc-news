@@ -7,6 +7,7 @@
  ** Classes CSS
  ** Menu item actif
  ** Contenu
+ ** Résultats de recherche
  * 
  */
 
@@ -174,3 +175,20 @@ add_action( 'pc_action_page_main_footer', 'pc_news_display_single_backlink', 20 
 
 
 /*=====  FIN Contenu  =====*/
+
+/*==============================================
+=            Résultats de recherche            =
+==============================================*/
+
+
+add_filter( 'pc_filter_search_results_type', 'pc_news_edit_search_results_type' );
+
+	function pc_news_edit_search_results_type( $types ) {
+
+		$types[NEWS_POST_SLUG] = 'Actualité';
+		return $types;
+
+	}
+
+
+/*=====  FIN Résultats de recherche  =====*/
