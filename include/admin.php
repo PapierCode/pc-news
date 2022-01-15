@@ -39,7 +39,7 @@ add_filter( 'pc_filter_settings_home_fields', 'pc_news_edit_settings_home_fields
 =            Option de page            =
 ======================================*/
     
-add_filter( 'pc_filter_settings_project', 'pc_news_edit_settings_project' );
+add_filter( 'pc_filter_settings_project', 'pc_news_edit_settings_project', 10 );
 
     function pc_news_edit_settings_project( $settings ) {
 
