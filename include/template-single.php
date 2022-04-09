@@ -128,19 +128,18 @@ add_filter( 'pc_filter_breadcrumb', 'pc_news_edit_breadcrumb' );
 	
 /*----------  Date  ----------*/
 
-add_filter( 'pc_the_content_before', 'pc_news_display_single_date' );
+add_action( 'pc_action_page_main_header', 'pc_news_display_single_date', 35 );
 
-	function pc_news_display_single_date( $before ) {
+	function pc_news_display_single_date( $pc_post ) {
 
-		if ( is_singular( NEWS_POST_SLUG ) ) {
+		if ( NEWS_POST_SLUG == $pc_post->type ) {
 
-			global $pc_post;
-
-			$before .= '<p><time class="news-date" datetime="'.$pc_post->get_date('c').'">Actualité du '.$pc_post->get_date().'</time></p>';
+			echo '<p class="single-date single-date--news">';
+				echo '<span class="ico">'.pc_svg('calendar').'</span>';
+				echo '<time class="txt news-date" datetime="'.$pc_post->get_date('c').'">Actualité publiée le '.$pc_post->get_date().'</time>';
+			echo '</p>';
 
 		}
-
-		return $before;
 
 	}
 
