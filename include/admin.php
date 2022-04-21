@@ -44,7 +44,7 @@ add_filter( 'pc_filter_settings_project', 'pc_news_edit_settings_project', 10 );
     function pc_news_edit_settings_project( $settings ) {
 
 		$settings['page-content-from'][NEWS_POST_SLUG] = array(
-			'Liste d\'actualités',
+			'Actualités',
 			dirname( __FILE__ ).'/template-archive.php'
 		);
 
