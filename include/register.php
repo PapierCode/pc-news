@@ -29,11 +29,14 @@ if ( class_exists( 'PC_Add_Custom_Post' ) ) {
 	$news_post_args = array(
 		'menu_position'     => 26,
 		'menu_icon'         => 'dashicons-megaphone',
+		'show_in_rest' 		=> true,
 		'show_in_nav_menus' => false,
 		'supports'          => array( 'title', 'editor' ),
 		'rewrite'			=> array( 'slug' => 'news-actualites'),
 		'has_archive'		=> false
 	);
+
+	if ( class_exists( 'Classic_Editor' ) ) { unset( $news_post_args['show_in_rest'] ); }
 
 
 	/*----------  Déclaration  ----------*/
