@@ -10,6 +10,34 @@
  * 
  */
 
+ 
+/*=======================================================
+=            Options du plugin (PC Réglages)            =
+=======================================================*/
+
+add_filter( 'pc_filter_settings_pc_fields', 'pc_news_edit_settings_pc_fields' );
+
+	function pc_news_edit_settings_pc_fields( $settings_pc_fields ) {
+
+		$settings_pc_fields[] = array(
+			'title'     => 'Actualités',
+			'id'        => 'news',
+			'prefix'    => 'news',
+			'fields'    => array(
+				array(
+					'type'      => 'checkbox',
+					'label_for' => 'to-pages',
+					'label'     => 'Associer aux pages'
+				)
+			)
+		);
+
+		return $settings_pc_fields;
+
+	}
+
+
+/*=====  FIN Options du plugin (PC Réglages)  =====*/
 
 /*===============================
 =            Accueil            =
@@ -95,3 +123,12 @@ add_action( 'manage_'.NEWS_POST_SLUG.'_posts_custom_column', 'pc_page_manage_pos
 
 
 /*=====  FIN Liste d'article  =====*/
+
+/*==========================
+=                        =
+==========================*/
+
+
+
+
+/*=====  FIN   =====*/
