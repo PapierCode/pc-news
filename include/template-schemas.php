@@ -22,10 +22,10 @@ add_filter ( 'pc_filter_page_schema_article_display', 'pc_news_edit_archive_sche
 		$metas = $pc_post->metas;
 
 		if ( isset( $metas['content-from'] ) && $metas['content-from'] == NEWS_POST_SLUG ) {
-
-			return false;
-
-		} else { return true; }
+			$display = false;
+		} 
+		
+		return $display;
 
 	}
 
