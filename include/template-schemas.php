@@ -41,10 +41,11 @@ add_filter( 'pc_filter_post_schema_article', 'pc_news_edit_single_schema', 10, 2
 	function pc_news_edit_single_schema( $schema, $pc_post ) {
 
 		if ( NEWS_POST_SLUG == $pc_post->type ) {
-			$schema['@type'] = 'NewsArticle';
+			global $settings_pc;
+			$schema['@type'] = $settings_pc['news-type'] == 'news' ? 'NewsArticle' : 'BlogPosting';
 		}
 		if ( isset($post_metas['content-from']) && $post_metas['content-from'][0] == NEWS_POST_SLUG ) {
-			// suppression schema article dans la liste d'actualités
+			// suppression schema article dans la liste des articles
 			$schema = array();
 		}
 

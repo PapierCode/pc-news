@@ -52,7 +52,7 @@ if ( $news_query->have_posts() ) {
 
 	echo '<ul class="st-list st-list--news reset-list">';
 
-	// affichage des actus
+	// affichage des articles
     while ( $news_query->have_posts() ) { $news_query->the_post();
 		
 		// début d'élément

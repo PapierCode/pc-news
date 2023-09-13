@@ -20,10 +20,20 @@ add_filter( 'pc_filter_settings_pc_fields', 'pc_news_edit_settings_pc_fields' );
 	function pc_news_edit_settings_pc_fields( $settings_pc_fields ) {
 
 		$settings_pc_fields[] = array(
-			'title'     => 'Actualités',
+			'title'     => 'Actualités/Blog',
 			'id'        => 'news',
 			'prefix'    => 'news',
 			'fields'    => array(
+				array(
+					'type'      => 'radio',
+					'label_for' => 'type',
+					'label'     => 'Type',
+					'default'	=> 'news',
+					'options'	=> array(
+						'Actualités' => 'news',
+						'Blog' => 'blog'
+					)
+				),
 				array(
 					'type'      => 'checkbox',
 					'label_for' => 'to-pages',
@@ -47,10 +57,12 @@ add_filter( 'pc_filter_settings_home_fields', 'pc_news_edit_settings_home_fields
 
 	function pc_news_edit_settings_home_fields( $fields ) {
 
+		global $settings_pc;
+
 		$news_title = array(
 			'type'      => 'text',
 			'label_for' => 'news-title',
-			'label'     => 'Titre des actualités',
+			'label'     => $settings_pc['news-type'] == 'news' ? 'Titre des actualités' : 'Titre des articles de blog',
 			'css'       => 'width:100%'
 		);
 
@@ -71,8 +83,10 @@ add_filter( 'pc_filter_settings_project', 'pc_news_edit_settings_project', 10 );
 
     function pc_news_edit_settings_project( $settings ) {
 
+		global $settings_pc;
+
 		$settings['page-content-from'][NEWS_POST_SLUG] = array(
-			'Actualités',
+			$settings_pc['news-type'] == 'news' ? 'Actualités' : 'Blog',
 			dirname( __FILE__ ).'/template-archive.php'
 		);
 

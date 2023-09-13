@@ -41,7 +41,8 @@ function pc_news_edit_single_html_css_class( $css_classes ) {
 	
 	if ( is_singular( NEWS_POST_SLUG ) ) {
 		$css_classes[] = 'is-page';
-		$css_classes[] = 'is-news';
+		global $settings_pc;
+		$css_classes[] = $settings_pc['news-type'] == 'news' ? 'is-news' : 'is-blog';
 	}
 
 	return $css_classes;
@@ -62,13 +63,13 @@ function pc_news_edit_single_nav_item_active( $menu_items, $args ) {
 	// si menu d'entête
 	if ( $args->theme_location == 'nav-header' ) {
 
-		// si c'est une actualité d'afficher
+		// si c'est un article d'afficher
 		if ( is_singular( NEWS_POST_SLUG ) ) {
 
-			// page qui publie les actus
+			// page qui publie les articles (archive)
 			$post = pc_get_page_by_custom_content( NEWS_POST_SLUG, 'object' );
 			if ( $post ) {
-				// si la page qui publie les actus a un parent ou pas
+				// si la page qui publie les articles a un parent ou pas
 				$id_to_search = ( $post->post_parent > 0 ) ? $post->post_parent : $post->ID;
 			}
 
@@ -136,7 +137,7 @@ add_action( 'pc_action_page_main_header', 'pc_news_display_single_date', 35 );
 
 			echo '<p class="single-date single-date--news">';
 				echo '<span class="ico">'.pc_svg('calendar').'</span>';
-				echo '<time class="txt news-date" datetime="'.$pc_post->get_date('c').'">Actualité publiée le '.$pc_post->get_date().'</time>';
+				echo '<time class="txt news-date" datetime="'.$pc_post->get_date('c').'">Article publié le '.$pc_post->get_date().'</time>';
 			echo '</p>';
 
 		}
@@ -161,8 +162,8 @@ add_action( 'pc_action_page_main_footer', 'pc_news_display_single_backlink', 20 
 				$back_ico = 'arrow';
 			} else {
 				$back_link = pc_get_page_by_custom_content( NEWS_POST_SLUG );
-				$back_title = 'Toutes les actualités';
-				$back_txt = 'd\'actualités';
+				$back_title = 'Tous les articles';
+				$back_txt = 'd\'articles';
 				$back_ico = 'more';
 			}
 
@@ -179,12 +180,12 @@ add_action( 'pc_action_page_main_footer', 'pc_news_display_single_backlink', 20 
 =            Résultats de recherche            =
 ==============================================*/
 
-
 add_filter( 'pc_filter_search_results_type', 'pc_news_edit_search_results_type' );
 
 	function pc_news_edit_search_results_type( $types ) {
 
-		$types[NEWS_POST_SLUG] = 'Actualité';
+		global $settings_pc;
+		$types[NEWS_POST_SLUG] = $settings_pc['news-type'] == 'news' ? 'Actualité' : 'Blog';
 		return $types;
 
 	}

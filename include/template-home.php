@@ -6,7 +6,7 @@
  */
 
 
-/*----------  Dernières actualités  ----------*/
+/*----------  Dernièrs articles  ----------*/
 
 add_action( 'pc_action_home_main_content', 'pc_news_display_home_last_news', 40 );
 
@@ -20,7 +20,9 @@ add_action( 'pc_action_home_main_content', 'pc_news_display_home_last_news', 40 
 			'posts_per_page' => 4
 		));
 		// titre de la section
-		$title = ( isset($metas['content-news-title']) && $metas['content-news-title'] != '' ) ? $metas['content-news-title'] : 'Actualités';
+		global $settings_pc;
+		$title = $settings_pc['news-type'] == 'news' ? 'Actualités' : 'Blog';
+		$title = ( isset($metas['content-news-title']) && $metas['content-news-title'] != '' ) ? $metas['content-news-title'] : $title;
 
 		// affichage des résumés de pages
 		if ( count($home_news) > 0 ) {
@@ -57,7 +59,7 @@ add_action( 'pc_action_home_main_content', 'pc_news_display_home_last_news', 40 
 				'display' => false,
 				'css' => array( 'button' ),
 				'ico_id' => 'more-s',
-				'txt' => 'Toutes les actualités'
+				'txt' => 'Tous les articles'
 			) );
 			if ( $btn_more_args['display'] ) {
 				echo '<div class="home-news-more"><a href="'.pc_get_page_by_custom_content(NEWS_POST_SLUG).'" class="'.implode(' ',$btn_more_args['css']).'"><span class="ico">'.pc_svg($btn_more_args['ico_id']).'</span><span class="txt">'.$btn_more_args['txt'].'</span></a></div>';

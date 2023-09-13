@@ -55,7 +55,7 @@ if ( isset($settings_pc['news-to-pages']) ) {
 					'post__not_in' => array( get_option( 'wp_page_for_privacy_policy' ) ) // page CGU 
 				);
 
-				// liste des actus
+				// liste des articles
 				$news_page = pc_get_page_by_custom_content( NEWS_POST_SLUG, 'object' );
 				if ( is_object( $news_page ) ) { $query_args['post__not_in'][] = $news_page->ID; }
 
