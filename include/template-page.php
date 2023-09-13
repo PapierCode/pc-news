@@ -9,6 +9,7 @@ add_action( 'pc_action_page_main_footer', 'pc_news_display_news_to_pages', 110 )
 
 		$news_to_pages = get_posts( array(
 			'post_type' => NEWS_POST_SLUG,
+			'posts_per_page' => 4,
 			'meta_query' => array(
 				array(
 					'key'     => 'news_to_pages',
