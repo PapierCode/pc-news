@@ -21,7 +21,7 @@ add_action( 'pc_action_page_main_footer', 'pc_news_display_news_to_pages', 110 )
 
 		if ( count( $news_to_pages ) > 0 ) {
 			
-			echo '<aside class="page-aside page-aside--news">';
+			echo '<aside class="page-aside page-aside--news"><div class="page-aside-inner">';
 				
 				global $settings_pc;
 				$title = apply_filters( 'pc_filter_news_to_pages', $settings_pc['news-type'] == 'news' ? 'Actualités' : 'Blog', $pc_post );
@@ -38,7 +38,7 @@ add_action( 'pc_action_page_main_footer', 'pc_news_display_news_to_pages', 110 )
 				}
 				echo '</ul>';
 
-			echo '</aside>';
+			echo '</div></aside>';
 
 		}
 

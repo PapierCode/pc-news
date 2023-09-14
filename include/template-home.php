@@ -27,7 +27,7 @@ add_action( 'pc_action_home_main_content', 'pc_news_display_home_last_news', 40 
 		// affichage des résumés de pages
 		if ( count($home_news) > 0 ) {
 
-			echo '<div class="home-news">';
+			echo '<div class="home-news"><div class="home-news-inner">';
 			echo '<h2 class="home-title-sub">'.$title.'</h2>';
 			echo '<ul class="st-list st-list--news reset-list">';
 
@@ -65,7 +65,7 @@ add_action( 'pc_action_home_main_content', 'pc_news_display_home_last_news', 40 
 				echo '<div class="home-news-more"><a href="'.pc_get_page_by_custom_content(NEWS_POST_SLUG).'" class="'.implode(' ',$btn_more_args['css']).'"><span class="ico">'.pc_svg($btn_more_args['ico_id']).'</span><span class="txt">'.$btn_more_args['txt'].'</span></a></div>';
 			}
 
-			echo '</div>';
+			echo '</div></div>';
 		}
 
 	}
