@@ -62,7 +62,7 @@ add_filter( 'pc_filter_settings_home_fields', 'pc_news_edit_settings_home_fields
 		$news_title = array(
 			'type'      => 'text',
 			'label_for' => 'news-title',
-			'label'     => $settings_pc['news-type'] == 'news' ? 'Titre des actualités' : 'Titre des articles de blog',
+			'label'     => $settings_pc['news-type'] == 'news' ? 'Titre de la section actualités' : 'Titre de la section blog',
 			'css'       => 'width:100%'
 		);
 
